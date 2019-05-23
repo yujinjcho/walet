@@ -1,3 +1,5 @@
+import json
+
 from flask import url_for
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
@@ -6,7 +8,6 @@ from google_auth_oauthlib.helpers import credentials_from_session
 
 from application import app
 
-client_secret = 'client_secret.json'
 google_scopes = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
 auth_callback = 'auth_callback'
 
@@ -54,15 +55,16 @@ def get_user_info(access_token, refresh_token):
     return authed_session.get('https://www.googleapis.com/userinfo/v2/me').json()
 
 def _get_client(state=None):
+    secret_config = json.loads(app.config['GOOGLE_CLIENT_SECRET_CONFIG'])
 
     if state is None:
-        return google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-            client_secret,
+        return google_auth_oauthlib.flow.Flow.from_client_config(
+            secret_config,
             scopes=google_scopes
         )
 
-    return google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-        client_secret,
+    return google_auth_oauthlib.flow.Flow.from_client_config(
+        secret_config,
         scopes=google_scopes,
         state=state
     )
