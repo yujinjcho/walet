@@ -29,7 +29,8 @@ def handle_account(access_token, refresh_token):
     data.create_account(email, encrypted_token, encrypted_refresh_token)
     new_account_ids = data.account_by_email(email)
     account_id = new_account_ids[0]
-    data.create_tag_rule(account_id, 'exclude')
+
+    data.create_tag(account_id, 'exclude')
     return account_id
 
 def get_plaid_accounts(account_id):
