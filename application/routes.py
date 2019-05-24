@@ -1,6 +1,6 @@
 import os
 
-from flask import jsonify, request, redirect, session, abort
+from flask import jsonify, request, redirect, session, abort, render_template
 
 from application import app
 from application import data
@@ -11,7 +11,8 @@ from application import manager
 
 @app.route('/', methods=['GET'])
 def root():
-    return 'Ok'
+    # return 'Ok'
+    return render_template('index.html')
 
 @app.route('/api/tags', methods=['GET'])
 def tags():
