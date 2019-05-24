@@ -144,3 +144,8 @@ def validate_account():
     account_id = helper.validate_request(request)
     response = jsonify({'result': account_id}) if account_id else abort(400)
     return response
+
+@app.route('/<path:path>')
+def catch_all(path):
+    #     return 'You want path: %s' % path
+    return render_template('index.html')
