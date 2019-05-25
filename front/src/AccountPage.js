@@ -51,6 +51,8 @@ class AccountPage extends Component {
 
   formatInstitution = (institutionId) => institutionId.split('_').map(x => _.upperFirst(x)).join(' ');
 
+  handleRemoveAccount = (e) => alert('This functionality has not been implemented yet!');
+
   render() {
     const { accounts } = this.state;
     return (
@@ -81,7 +83,7 @@ class AccountPage extends Component {
                     {this.formatAccountDescription(account)}
                   </Card.Text>
                   {/* TODO: add remove capability */}
-                  <Card.Link href="#">Remove</Card.Link>
+                  <Card.Link href="#" onClick={ this.handleRemoveAccount }>Remove</Card.Link>
                 </Card.Body>
               </Card>
             </Row>
