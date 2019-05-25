@@ -5,7 +5,7 @@ from cryptography.fernet import Fernet
 
 from application import app
 
-f = Fernet(app.config['PLAID']['access_token_key'])
+f = Fernet(app.config['SECRET_KEY'])
 date_pattern = '%Y-%m-%d'
 
 def extract_categories(transactions):

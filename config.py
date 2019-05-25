@@ -13,7 +13,6 @@ DB = {
 }
 
 PLAID = {
-    'access_token_key' : env['PLAID_ACCESS_TOKEN_KEY'],
     'client_id': env['PLAID_CLIENT_ID'],
     'secret': env['PLAID_SECRET'],
     'public_key': env['PLAID_PUBLIC_KEY'],
