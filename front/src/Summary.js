@@ -14,7 +14,6 @@ import helper from './helper';
 import values from './values';
 
 class Summary extends Component {
-
   state = {
     error: null,
     success: null,
@@ -46,11 +45,9 @@ class Summary extends Component {
   };
 
   render() {
-
     const { accountId, summaryData, getSummaryData, currentMonth } = this.props;
 
     if (summaryData) {
-
       const { tags, categories, tagRules, categoryRules, transactions } = summaryData;
 
       if (categories.length === 0 && transactions.length > 0) {
@@ -67,7 +64,6 @@ class Summary extends Component {
       return (
         <div className="summary-container">
 
-
           <Container>
 
             <Row className='action-alerts'>
@@ -82,8 +78,8 @@ class Summary extends Component {
                 <ListGroup>
                   <ListGroup.Item className='controller-section'>
                     <Container>
-                      <Row className='date-tag-select'>
 
+                      <Row className='date-tag-select'>
                         <Col xs={1} >
                           <div>
                             Date
@@ -98,8 +94,6 @@ class Summary extends Component {
                               onChange= { this.updateMonth }
                             />
                         </Col>
-
-
                       </Row>
 
                       <Row className='date-tag-select'>

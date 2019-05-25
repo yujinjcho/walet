@@ -1,4 +1,3 @@
-
 import values from './values';
 import authHelper from './authHelper';
 

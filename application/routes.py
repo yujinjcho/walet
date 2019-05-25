@@ -11,7 +11,6 @@ from application import manager
 
 @app.route('/', methods=['GET'])
 def root():
-    # return 'Ok'
     return render_template('index.html')
 
 @app.route('/api/tags', methods=['GET'])
@@ -77,7 +76,6 @@ def category_rules():
         return jsonify({'result': result})
 
     return abort(400)
-
 
 @app.route('/api/category_rules', methods=['POST'])
 def create_category_rule():
@@ -147,5 +145,4 @@ def validate_account():
 
 @app.route('/<path:path>')
 def catch_all(path):
-    #     return 'You want path: %s' % path
     return render_template('index.html')

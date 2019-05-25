@@ -27,7 +27,6 @@ const createSummary = (transactions) => {
   return Object.keys(summary).map(c => {return {category: c, amount: summary[c].amount, transactions: summary[c].transactions }});
 };
 
-
 const groupTransactions = (transactions) => {
   return transactions
     .reduce(

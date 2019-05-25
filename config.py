@@ -4,7 +4,6 @@ env = os.environ
 
 SECRET_KEY = env['SECRET_KEY']
 
-
 DB = {
     'dbname': env['DB_NAME'],
     'password': env['DB_PASSWORD'],

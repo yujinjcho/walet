@@ -29,16 +29,8 @@ def handle_auth_callback(request, session):
     flow = _get_client(state)
     flow.redirect_uri = url_for(auth_callback, _external=True)
     authorization_response = request.url.strip()
-
-
-    print('\nDebug: handle_auth_callback')
-    print('authorization_response: {}\n'.format(authorization_response))
-
     flow.fetch_token(authorization_response=authorization_response)
     credentials = flow.credentials
-
-    print('session: {}'.format(session))
-
     session['credentials'] = {
         'token': credentials.token,
         'refresh_token': credentials.refresh_token,

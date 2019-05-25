@@ -9,7 +9,6 @@ import CreatableSelect from 'react-select/lib/Creatable';
 
 import './CategoryTransaction.css';
 
-
 class CategoryTransaction extends Component {
   state = {
     openCategoryEdit: false,

@@ -6,7 +6,6 @@ import values from './values';
 import withLogin from './withLogin';
 
 class SummaryContainer extends Component {
-
   state = {
     transactions: undefined,
     categoryRules: undefined,
