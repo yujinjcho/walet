@@ -1,0 +1,10 @@
+.total-section {
+  border-radius: 0px !important;
+  background: #F8F6F3;
+  color: #717171;
+  font-family: 'Open Sans','Helvetica Neue';
+  text-transform: uppercase;
+  letter-spacing: .125rem;
+  font-weight: 600;
+  font-size: 15px;
+}

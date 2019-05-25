@@ -1,0 +1,12 @@
+.login-logo {
+  font-size: 200px;
+  text-align: center;
+}
+
+.login-section {
+  width: 500px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+}
