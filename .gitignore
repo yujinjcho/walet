@@ -11,3 +11,4 @@ client_secret.json
 openssl/
 cert.pem
 key.pem
+application/build
