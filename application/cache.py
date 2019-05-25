@@ -1,7 +1,7 @@
 from datetime import timedelta, datetime
 
 cached_data = {}
-ttl = timedelta(days=3)
+ttl = timedelta(hours=12)
 
 def get_transactions(account_id, month):
     key = str(account_id) + '-' + month
@@ -23,3 +23,9 @@ def store_transactions(account_id, month, transactions):
         'date': now,
         'transactions': transactions
     }
+
+def clear_cache(account_id):
+    for key, data in cached_data.items():
+        user_id, month = key.split('-')
+        if user_id == str(account_id):
+            cached_data.pop(user_id)

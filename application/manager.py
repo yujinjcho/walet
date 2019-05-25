@@ -51,6 +51,7 @@ def create_plaid_accounts(account_id, public_token):
     item_id = access_info['item_id']
     access_token = access_info['access_token']
     encrypted_access_token = helper.encrypt(access_token)
+    cache.clear_cache(account_id)
     return data.save_access_token(encrypted_access_token, item_id, account_id)
 
 def get_transactions(account_id, month):
