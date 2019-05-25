@@ -6,7 +6,7 @@ SECRET_KEY = env['SECRET_KEY']
 
 DB = {
     'dbname': env['DB_NAME'],
-    'password': env['DB_PASSWORD'],
+    'password': env.get('DB_PASSWORD', None),
     'user': env['DB_USER'],
     'port': env['DB_PORT'],
     'host': env['DB_HOST']
