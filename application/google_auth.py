@@ -23,9 +23,7 @@ def auth_url(session):
     return authorization_url
 
 def handle_auth_callback(request, session):
-
     state = session.get('state', None)
-
     flow = _get_client(state)
     flow.redirect_uri = url_for(auth_callback, _external=True)
     authorization_response = request.url.strip()
