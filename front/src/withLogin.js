@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 
 import Navigation from './Navigation';
 import authHelper from './authHelper';
+import api from './api';
 
 export default Wrapped => {
   class WithLogin extends Component {
@@ -17,7 +18,7 @@ export default Wrapped => {
     }
 
     componentWillMount() {
-      fetch('/api/validate/account', { headers: authHelper.header() })
+      api.fetchHelper('/api/validate/account', { headers: authHelper.header() })
         .then(res => res.json())
         .then(res => this.setState({ accountId: res.result }))
         .catch(this.handleError);
