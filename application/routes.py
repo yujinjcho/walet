@@ -11,6 +11,8 @@ from application import manager
 
 @app.route('/', methods=['GET'])
 def root():
+    if app.config['APPLICATION_ENVIRONMENT'] == 'development':
+        return redirect('http://localhost:3000')
     return render_template('index.html')
 
 @app.route('/api/tags', methods=['GET'])
@@ -132,8 +134,9 @@ def auth_callback():
 
 @app.route('/api/auth/user_info', methods=['GET'])
 def auth_user_info():
-    access_token = app.config['GOOGLE_AUTH']['access_token']
-    refresh_token = app.config['GOOGLE_AUTH']['refresh_token']
+    # TODO: Need to get this from db
+    access_token = 'token'
+    refersh_token = None
     res = google_auth.get_user_info(access_token, refresh_token)
     return jsonify(res)
 
@@ -145,4 +148,6 @@ def validate_account():
 
 @app.route('/<path:path>')
 def catch_all(path):
+    if app.config['APPLICATION_ENVIRONMENT'] == 'development':
+        return redirect('http://localhost:3000/' + path)
     return render_template('index.html')

@@ -3,6 +3,7 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import authHelper from './authHelper';
+import api from './api';
 
 import './EditTag.css';
 
@@ -45,7 +46,7 @@ class EditTag extends Component {
       });
 
       const headers = Object.assign({ 'Content-Type': 'application/json'}, authHelper.header());
-      fetch('/api/tag_rules', {
+      api.fetchHelper('/api/tag_rules', {
         method: 'POST',
         headers: headers,
         body: rule

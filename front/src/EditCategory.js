@@ -3,6 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import authHelper from './authHelper';
+import api from './api';
 
 import './EditCategory.css';
 
@@ -44,7 +45,7 @@ class EditCategory extends Component {
     });
 
     const headers = {...{ 'Content-Type': 'application/json' }, ...authHelper.header()}
-    fetch(`/api/category_rules`, {
+    api.fetchHelper(`/api/category_rules`, {
       method: 'POST',
       headers,
       body: rule

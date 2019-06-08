@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
 
+import api from './api';
+
 import './Login.css';
 
 class Login extends Component {
@@ -10,7 +12,7 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    fetch('/api/auth/login')
+    api.fetchHelper('/api/auth/login')
       .then(res => res.json())
       .then(res => this.setState({ authRedirectUrl: res.result }))
       .catch(_ => console.error('failed to retrieve authentication url'))

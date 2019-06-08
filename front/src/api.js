@@ -1,10 +1,14 @@
 import values from './values';
 import authHelper from './authHelper';
 
+const baseUrl = process.env.REACT_APP_SERVICES_BASE_URL || '';
+
+const fetchHelper = (url, options = {}) => fetch(baseUrl + url, options);
+
 const loadTransactions = (accountId, monthName) => {
   const month = values.months.indexOf(monthName) + 1;
 
-  return fetch(`/api/transactions?month=${month}`, { headers: authHelper.header() })
+  return fetchHelper(`/api/transactions?month=${month}`, { headers: authHelper.header() })
     .then(res => res.json())
     .catch(e => {
       console.warn("loadTransaction failed: ")
@@ -13,7 +17,7 @@ const loadTransactions = (accountId, monthName) => {
 }
 
 const loadCategoryRules = (accountId) => {
-  return fetch(`/api/category_rules`, { headers: authHelper.header() })
+  return fetchHelper(`/api/category_rules`, { headers: authHelper.header() })
     .then(res => res.json())
     .catch(e => {
       console.warn("loadCategoryRules failed: ")
@@ -22,7 +26,7 @@ const loadCategoryRules = (accountId) => {
 };
 
 const loadTagRules = (accountId) => {
-  return fetch(`/api/tag_rules`, { headers: authHelper.header() })
+  return fetchHelper(`/api/tag_rules`, { headers: authHelper.header() })
     .then(res => res.json())
     .catch(e => {
       console.warn("loadTagRules failed: ")
@@ -31,7 +35,7 @@ const loadTagRules = (accountId) => {
 };
 
 const loadCategories = (accountId) => {
-  return fetch(`/api/categories`, { headers: authHelper.header() })
+  return fetchHelper(`/api/categories`, { headers: authHelper.header() })
     .then(res => res.json())
     .catch(e => {
       console.warn("loadCategories failed: ")
@@ -40,7 +44,7 @@ const loadCategories = (accountId) => {
 }
 
 const loadTags = (accountId) => {
-  return fetch(`/api/tags`, { headers: authHelper.header() })
+  return fetchHelper(`/api/tags`, { headers: authHelper.header() })
     .then(res => res.json())
     .catch(e => {
       console.warn("loadTags failed: ")
@@ -53,5 +57,6 @@ export default {
   loadCategoryRules,
   loadTagRules,
   loadCategories,
-  loadTags
+  loadTags,
+  fetchHelper
 };
