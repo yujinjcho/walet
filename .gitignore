@@ -11,4 +11,7 @@ client_secret.json
 openssl/
 cert.pem
 key.pem
+
+# make sure this is last line of file
+# used for deploy
 application/build
