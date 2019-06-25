@@ -8,7 +8,7 @@ from google_auth_oauthlib.helpers import credentials_from_session
 
 from application import app
 
-google_scopes = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
+google_scopes = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile', 'openid']
 auth_callback = 'auth_callback'
 
 def auth_url(session):
