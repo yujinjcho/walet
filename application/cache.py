@@ -27,5 +27,5 @@ def store_transactions(account_id, month, transactions):
 def clear_cache(account_id):
     for key, data in cached_data.items():
         user_id, month = key.split('-')
-        if user_id == str(account_id):
+        if user_id == str(account_id) and user_id in cached_data:
             cached_data.pop(user_id)
