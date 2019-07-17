@@ -95,8 +95,8 @@ def transactions():
     account_id = helper.validate_request(request)
 
     if account_id:
-        account_transactions = manager.get_transactions(account_id, month)
-        return jsonify({'result': account_transactions})
+        transaction_result = manager.get_transactions(account_id, month)
+        return jsonify(transaction_result)
 
     return abort(400)
 
@@ -105,8 +105,8 @@ def plaid_accounts():
     account_id = helper.validate_request(request)
 
     if account_id:
-        accounts = manager.get_plaid_accounts(account_id)
-        return jsonify({ 'result': accounts })
+        accounts_result = manager.get_plaid_accounts(account_id)
+        return jsonify(accounts_result)
 
     return abort(400)
 

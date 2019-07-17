@@ -7,6 +7,8 @@ from application import helper
 from application import plaid
 from application import cache
 
+from plaid.errors import APIError
+
 def handle_auth_callback(request, session):
     access_token, refresh_token = google_auth.handle_auth_callback(request, session)
     account_id = handle_account(access_token, refresh_token)
@@ -36,7 +38,7 @@ def handle_account(access_token, refresh_token):
 def get_plaid_accounts(account_id):
     tokens = [token[0] for token in data.access_tokens(account_id)]
     accounts = plaid.accounts(account_id, tokens)
-    return [
+    accounts_info = [
         {
             'item_id': account['item']['item_id'],
             'institution_id': account['item']['institution_id'],
@@ -45,6 +47,7 @@ def get_plaid_accounts(account_id):
         }
         for account in accounts
     ]
+    return { 'result': accounts_info }
 
 def create_plaid_accounts(account_id, public_token):
     access_info = plaid.access_token(public_token)
@@ -60,10 +63,18 @@ def get_transactions(account_id, month):
         print('returning cached transactions')
         return cached_transactions
     tokens = [token[0] for token in data.access_tokens(account_id)]
-    transactions = plaid.transactions(account_id, month, tokens)
-    cache.store_transactions(account_id, month, transactions)
 
-    # also update categories
-    data.update_plaid_categories(helper.extract_categories(transactions), account_id)
+    try:
+        transactions = plaid.transactions(account_id, month, tokens)
+        cache.store_transactions(account_id, month, transactions)
+        data.update_plaid_categories(helper.extract_categories(transactions), account_id)
+        result = {'result': transactions}
 
-    return transactions
+    except APIError as e:
+        print('plaid error e: {}'.format(e))
+        result = {
+            'result': [],
+            'error': 'Issue with plaid API, you may want to try again later!'
+        }
+
+    return result
