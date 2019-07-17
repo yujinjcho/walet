@@ -9,6 +9,7 @@ import Card from 'react-bootstrap/Card';
 import withLogin from './withLogin';
 import PlaidLink from 'react-plaid-link';
 import authHelper from './authHelper';
+import api from './api';
 
 import './AccountPage.css'
 
@@ -20,7 +21,7 @@ class AccountPage extends Component {
   handleOnSuccess = (publicToken, metadata) => {
     const request = { publicToken: publicToken }
     const headers = {...{ 'Content-Type': 'application/json' }, ...authHelper.header()}
-    fetch(`/api/plaid_accounts`, {
+    api.fetchHelper(`/api/plaid_accounts`, {
       headers,
       method: 'POST',
       body: JSON.stringify(request)
@@ -39,7 +40,7 @@ class AccountPage extends Component {
   }
 
   refreshAccounts = () =>
-    fetch(`/api/plaid_accounts`, { headers: authHelper.header() })
+    api.fetchHelper(`/api/plaid_accounts`, { headers: authHelper.header() })
       .then(res => res.json())
       .then(res => this.setState({accounts: res.result}))
 

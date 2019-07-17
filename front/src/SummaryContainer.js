@@ -41,6 +41,10 @@ class SummaryContainer extends Component {
           categories,
         ] = res;
 
+        if (transactions.error) {
+          alert(transactions.error);
+        }
+
         this.setState({
           transactions: transactions.result,
           categoryRules: categoryRules.result,
