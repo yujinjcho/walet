@@ -67,6 +67,7 @@ class AccountPage extends Component {
               env="development"
               product={["auth", "transactions"]}
               publicKey="d9f0a56826f5d4249fdad6f82c89d4"
+              webhook={process.env.REACT_APP_WEBHOOK_URL}
               onExit={this.handleOnExit}
               onSuccess={this.handleOnSuccess}>
               Connect Bank
