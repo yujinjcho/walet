@@ -1,4 +1,5 @@
 import jwt
+import json
 
 from application import app
 from application import google_auth
@@ -82,15 +83,19 @@ def get_transactions(account_id, month):
 def handle_webhook(webhook):
     code = webhook['webhook_code']
     item_id = webhook['item_id']
-    success = "success"
 
     if code == "DEFAULT_UPDATE":
-        token = data.access_token_by_item_id(item_id)
-        if token:
-            transactions = plaid.recent_transactions(item_id, token[0])
-            # persist
+        tokens = data.access_token_by_item_id(item_id)
+        if tokens:
+            access_token, account_id = tokens[0]
+            transactions = plaid.recent_transactions(item_id, access_token)
+            db_transactions = [
+                (x['transaction_id'], account_id, json.dumps(x), x['date'], item_id )
+                for x in transactions
+            ]
+            data.update_transactions(db_transactions)
 
-    elif code == "TRANSACTIONS_REMOVED"
+    elif code == "TRANSACTIONS_REMOVED":
         data.delete_transactions(item_id, webhook['removed_transactions'])
     else:
         print(f"Ignoring webhook: {webhook}")

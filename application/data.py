@@ -128,7 +128,7 @@ def access_tokens(account_id):
     return _select('SELECT access_token FROM plaid_items WHERE account_id = %s', (account_id,))
 
 def access_token_by_item_id(item_id):
-    return _select("SELECT access_token FROM plaid_items WHERE item_id = %s", (item_id,))
+    return _select("SELECT access_token, account_id FROM plaid_items WHERE item_id = %s", (item_id,))
 
 def save_access_token(access_token, item_id, account_id):
     query = """
@@ -178,6 +178,25 @@ def create_account(email, access_token, refresh_token):
         VALUES (%s, %s, %s)
     """
     return _insert(query, (access_token, refresh_token, email))
+
+def update_transactions(transactions):
+    query = """
+      INSERT INTO plaid_transactions (transaction_id, account_id, data, transaction_date, item_id)
+        VALUES %s
+        ON CONFLICT (account_id, transaction_id)
+          DO UPDATE
+          SET data = excluded.data
+    """
+    db = _connection()
+    try:
+        with db.cursor() as cur:
+            execute_values(cur, query, transactions)
+            updated = cur.rowcount
+        db.commit()
+    finally:
+        db.close()
+
+    return updated
 
 def delete_transactions(item_id, transaction_ids):
     print(f"deleting transactions: {transaction_ids}")
