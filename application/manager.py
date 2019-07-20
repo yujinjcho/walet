@@ -78,3 +78,23 @@ def get_transactions(account_id, month):
         }
 
     return result
+
+def handle_webhook(webhook):
+    code = webhook['webhook_code']
+    item_id = webhook['item_id']
+    success = "success"
+
+    if code == "DEFAULT_UPDATE":
+        token = data.access_token_by_item_id(item_id)
+        if token:
+            transactions = plaid.recent_transactions(item_id, token[0])
+            # persist
+
+    elif code == "TRANSACTIONS_REMOVED"
+        data.delete_transactions(item_id, webhook['removed_transactions'])
+    else:
+        print(f"Ignoring webhook: {webhook}")
+
+    return "success"
+
+

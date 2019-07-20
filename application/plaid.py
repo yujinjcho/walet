@@ -26,6 +26,12 @@ def transactions(account_id, month, tokens):
 
     return transactions
 
+def recent_transactions(item_id, token):
+    start, end = helper.recent_range()
+    access_token = helper.decrypt(token)
+    response = client.Transactions.get(access_token, start_date=start, end_date=end)
+    return response['transactions']
+
 def accounts(account_id, tokens):
     accounts = []
     for token in tokens:

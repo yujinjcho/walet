@@ -1,6 +1,6 @@
 import calendar
 import jwt
-from datetime import datetime
+from datetime import datetime, timedelta
 from cryptography.fernet import Fernet
 
 from application import app
@@ -28,6 +28,12 @@ def start_end_of_month(month, year):
     start_date = datetime(year, month, 1).strftime(date_pattern)
     end_date = datetime(year, month, num_of_days).strftime(date_pattern)
     return start_date, end_date
+
+def recent_range():
+    end = datetime.now()
+    start = end - timedelta(days=15)
+    return start.strftime(date_pattern), end.strftime(date_pattern)
+
 
 def generate_jwt(account_id):
     return jwt.encode({'account_id': account_id}, app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
