@@ -125,7 +125,7 @@ def create_category(account_id, category):
     return _insert(query, (category, account_id))
 
 def access_tokens(account_id):
-    return _select('SELECT access_token FROM plaid_items WHERE account_id = %s', (account_id,))
+    return _select('SELECT item_id, access_token FROM plaid_items WHERE account_id = %s', (account_id,))
 
 def access_token_by_item_id(item_id):
     return _select("SELECT access_token, account_id FROM plaid_items WHERE item_id = %s", (item_id,))
@@ -178,6 +178,17 @@ def create_account(email, access_token, refresh_token):
         VALUES (%s, %s, %s)
     """
     return _insert(query, (access_token, refresh_token, email))
+
+def get_transactions(account_id, item_id, month):
+    query = """
+        SELECT data
+        FROM plaid_transactions
+        WHERE
+          account_id = %s
+          AND item_id = %s
+          AND DATE_PART('month', transaction_date) = %s
+    """
+    return _select(query, (account_id, item_id, month))
 
 def update_transactions(transactions):
     query = """

@@ -10,6 +10,7 @@ date_pattern = '%Y-%m-%d'
 
 def extract_categories(transactions):
     'selecting top level categories'
+
     categories = [
         transaction['category'][0]
         for transaction in transactions if len(transaction['category']) > 0

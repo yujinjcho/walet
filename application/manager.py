@@ -36,7 +36,7 @@ def handle_account(access_token, refresh_token):
     return account_id
 
 def get_plaid_accounts(account_id):
-    tokens = [token[0] for token in data.access_tokens(account_id)]
+    tokens = [token[1] for token in data.access_tokens(account_id)]
     accounts = plaid.accounts(account_id, tokens)
     accounts_info = [
         {
@@ -57,23 +57,41 @@ def create_plaid_accounts(account_id, public_token):
     return data.save_access_token(encrypted_access_token, item_id, account_id)
 
 def get_transactions(account_id, month):
+    # {item_id: token}
+    tokens = {token[0]: token[1] for token in data.access_tokens(account_id)}
 
-    # check transactions in db
-    # if not there get from api and store
-    # if there just use those
+    transactions = []
+    error = None
+    for item_id, token in tokens.items():
 
-    try:
-        tokens = [token[0] for token in data.access_tokens(account_id)]
-        transactions = plaid.transactions(account_id, month, tokens)
-        data.update_plaid_categories(helper.extract_categories(transactions), account_id)
-        result = {'result': transactions}
+        stored_transactions = [x[0] for x in data.get_transactions(account_id, item_id, month)]
+        if stored_transactions:
+            print(f"retrieving stored transactions for item_id: {item_id}")
+            transactions.extend(stored_transactions)
+        else:
+            try:
+                item_transactions = plaid.transactions(account_id, month, token)
 
-    except APIError as e:
-        print('plaid error e: {}'.format(e))
-        result = {
-            'result': [],
-            'error': 'Issue with plaid API, you may want to try again later!'
-        }
+                db_transactions = [
+                    (x['transaction_id'], account_id, json.dumps(x), x['date'], item_id)
+                    for x in item_transactions
+                ]
+                print(f"persisting {len(item_transactions)} transactions for month: {month}, item_id: {item_id}")
+                data.update_transactions(db_transactions)
+                data.update_plaid_categories(helper.extract_categories(item_transactions), account_id)
+
+            except APIError as e:
+                print('plaid error e: {}'.format(e))
+                error = "Could not retrieve transactions due to plaid API issues"
+                item_transactions = []
+
+            transactions.extend(item_transactions)
+
+
+    if error:
+        result = { 'result': transactions, 'error': error }
+    else:
+        result = { 'result': transactions }
 
     return result
 
@@ -91,6 +109,7 @@ def handle_webhook(webhook):
                 (x['transaction_id'], account_id, json.dumps(x), x['date'], item_id )
                 for x in transactions
             ]
+            data.update_plaid_categories(helper.extract_categories(transactions), account_id)
             result = data.update_transactions(db_transactions)
             print(f"updated rows: {result}")
 
