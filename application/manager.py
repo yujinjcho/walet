@@ -6,7 +6,6 @@ from application import google_auth
 from application import data
 from application import helper
 from application import plaid
-from application import cache
 
 from plaid.errors import APIError
 
@@ -55,19 +54,13 @@ def create_plaid_accounts(account_id, public_token):
     item_id = access_info['item_id']
     access_token = access_info['access_token']
     encrypted_access_token = helper.encrypt(access_token)
-    cache.clear_cache(account_id)
     return data.save_access_token(encrypted_access_token, item_id, account_id)
 
 def get_transactions(account_id, month):
-    cached_transactions = cache.get_transactions(account_id, month)
-    if not cached_transactions is None:
-        print('returning cached transactions')
-        return cached_transactions
     tokens = [token[0] for token in data.access_tokens(account_id)]
 
     try:
         transactions = plaid.transactions(account_id, month, tokens)
-        cache.store_transactions(account_id, month, transactions)
         data.update_plaid_categories(helper.extract_categories(transactions), account_id)
         result = {'result': transactions}
 
