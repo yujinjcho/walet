@@ -31,7 +31,7 @@ def start_end_of_month(month, year):
 
 def recent_range():
     end = datetime.now()
-    start = end - timedelta(days=15)
+    start = end - timedelta(days=30)
     return start.strftime(date_pattern), end.strftime(date_pattern)
 
 

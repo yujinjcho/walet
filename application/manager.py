@@ -57,9 +57,13 @@ def create_plaid_accounts(account_id, public_token):
     return data.save_access_token(encrypted_access_token, item_id, account_id)
 
 def get_transactions(account_id, month):
-    tokens = [token[0] for token in data.access_tokens(account_id)]
+
+    # check transactions in db
+    # if not there get from api and store
+    # if there just use those
 
     try:
+        tokens = [token[0] for token in data.access_tokens(account_id)]
         transactions = plaid.transactions(account_id, month, tokens)
         data.update_plaid_categories(helper.extract_categories(transactions), account_id)
         result = {'result': transactions}
