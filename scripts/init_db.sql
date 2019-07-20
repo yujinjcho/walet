@@ -58,3 +58,13 @@ CREATE UNIQUE INDEX ON account (account_id, google_auth_token);
 
 CREATE UNIQUE INDEX ON account (email);
 ALTER TABLE account ADD COLUMN google_refresh_token TEXT;
+
+CREATE UNIQUE INDEX ON plaid_items (item_id);
+CREATE TABLE plaid_transactions (
+  transaction_id    TEXT PRIMARY KEY,
+  account_id        INTEGER REFERENCES account(account_id),
+  data              JSON,
+  transaction_date  DATE,
+  item_id           TEXT REFERENCES plaid_items(item_id),
+  UNIQUE            (transaction_id, account_id)
+);
