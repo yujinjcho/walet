@@ -81,6 +81,7 @@ def get_transactions(account_id, month):
     return result
 
 def handle_webhook(webhook):
+    print(f"handling webhook: {webhook}")
     code = webhook['webhook_code']
     item_id = webhook['item_id']
 
@@ -93,10 +94,12 @@ def handle_webhook(webhook):
                 (x['transaction_id'], account_id, json.dumps(x), x['date'], item_id )
                 for x in transactions
             ]
-            data.update_transactions(db_transactions)
+            result = data.update_transactions(db_transactions)
+            print(f"updated rows: {result}")
 
     elif code == "TRANSACTIONS_REMOVED":
-        data.delete_transactions(item_id, webhook['removed_transactions'])
+        result = data.delete_transactions(item_id, webhook['removed_transactions'])
+        print(f"deleted rows: {result}")
     else:
         print(f"Ignoring webhook: {webhook}")
 
