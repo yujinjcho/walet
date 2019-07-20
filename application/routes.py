@@ -146,8 +146,17 @@ def validate_account():
     response = jsonify({'result': account_id}) if account_id else abort(400)
     return response
 
+@app.route('/api/plaid/webhook', methods=['POST'])
+def plaid_webhook():
+    webhook = request.json
+    response = manager.handle_webhook(webhook)
+    return response
+
+
 @app.route('/<path:path>')
 def catch_all(path):
     if app.config['APPLICATION_ENVIRONMENT'] == 'development':
         return redirect('http://localhost:3000/' + path)
     return render_template('index.html')
+
+

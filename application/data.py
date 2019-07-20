@@ -125,7 +125,10 @@ def create_category(account_id, category):
     return _insert(query, (category, account_id))
 
 def access_tokens(account_id):
-    return _select('SELECT access_token FROM plaid_items WHERE account_id = %s', (account_id,))
+    return _select('SELECT item_id, access_token FROM plaid_items WHERE account_id = %s', (account_id,))
+
+def access_token_by_item_id(item_id):
+    return _select("SELECT access_token, account_id FROM plaid_items WHERE item_id = %s", (item_id,))
 
 def save_access_token(access_token, item_id, account_id):
     query = """
@@ -176,6 +179,46 @@ def create_account(email, access_token, refresh_token):
     """
     return _insert(query, (access_token, refresh_token, email))
 
+def get_transactions(account_id, item_id, month):
+    query = """
+        SELECT data
+        FROM plaid_transactions
+        WHERE
+          account_id = %s
+          AND item_id = %s
+          AND DATE_PART('month', transaction_date) = %s
+    """
+    return _select(query, (account_id, item_id, month))
+
+def update_transactions(transactions):
+    query = """
+      INSERT INTO plaid_transactions (transaction_id, account_id, data, transaction_date, item_id)
+        VALUES %s
+        ON CONFLICT (account_id, transaction_id)
+          DO UPDATE
+          SET data = excluded.data
+    """
+    db = _connection()
+    try:
+        with db.cursor() as cur:
+            execute_values(cur, query, transactions)
+            updated = cur.rowcount
+        db.commit()
+    finally:
+        db.close()
+
+    return updated
+
+def delete_transactions(item_id, transaction_ids):
+    print(f"deleting transactions: {transaction_ids}")
+    params = (item_id, tuple(transaction_ids))
+    query = """
+      DELETE FROM plaid_transactions
+        WHERE item_id = %s
+          AND transaction_id in %s
+    """
+    return _delete(query, params)
+
 def _insert(query, params):
     db = _connection()
     try:
@@ -204,6 +247,20 @@ def _select(query, params = None):
         db.close()
 
     return results
+
+def _delete(query, params):
+    try:
+        db = _connection()
+        with db.cursor() as cur:
+            cur.execute(query, params)
+            updated_rows = cur.rowcount
+
+        db.commit()
+        cur.close()
+    finally:
+        db.close()
+
+    return updated_rows
 
 def _connection():
     return psycopg2.connect(**app.config['DB'])
