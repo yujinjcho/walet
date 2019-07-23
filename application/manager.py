@@ -67,6 +67,7 @@ def get_transactions(account_id, month):
         stored_transactions = [x[0] for x in data.get_transactions(account_id, item_id, month)]
         if stored_transactions:
             print(f"retrieving stored transactions for item_id: {item_id}")
+            data.update_plaid_categories(helper.extract_categories(stored_transactions), account_id)
             transactions.extend(stored_transactions)
         else:
             try:
