@@ -67,6 +67,7 @@ def get_transactions(account_id, month):
         stored_transactions = [x[0] for x in data.get_transactions(account_id, item_id, month)]
         if stored_transactions:
             print(f"retrieving stored transactions for item_id: {item_id}")
+            data.update_plaid_categories(helper.extract_categories(stored_transactions), account_id)
             transactions.extend(stored_transactions)
         else:
             try:
@@ -87,11 +88,12 @@ def get_transactions(account_id, month):
 
             transactions.extend(item_transactions)
 
+    settled_transactions = [t for t in transactions if not t['pending']]
 
     if error:
-        result = { 'result': transactions, 'error': error }
+        result = { 'result': settled_transactions, 'error': error }
     else:
-        result = { 'result': transactions }
+        result = { 'result': settled_transactions }
 
     return result
 

@@ -27,8 +27,21 @@ function Login() {
   return (
     <div className='login-section'>
       <div className='login-logo'>
-        Walet
+        Easily Track and Categorize Your Monthly Spending
       </div>
+
+      <div className='demo-section'>
+        <iframe
+          title="demo"
+          width="840"
+          height="473"
+          src="https://www.youtube.com/embed/7WQNxeVZusQ"
+          frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+
         { authRedirectUrl &&
           <a href={ authRedirectUrl }>
             <Button variant="primary" size="lg" block >
