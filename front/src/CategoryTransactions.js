@@ -8,7 +8,7 @@ import './CategoryTransactions.css';
 
 class CategoryTransactions extends Component {
 
-  sortTransactions = (transactions) => transactions.slice().sort((x,y) => y.amount - x.amount)
+  sortTransactions = (transactions) => transactions.slice().sort((x,y) => new Date(y.date) - new Date(x.date))
 
   render() {
     const { transactions } = this.props;

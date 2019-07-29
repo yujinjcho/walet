@@ -37,6 +37,8 @@ class CategoryTransaction extends Component {
     this.setState({ openTagEdit: false })
   };
 
+  formatDate = (date) => date.split('-').slice(1,3).join('/')
+
   render() {
     const {
       transaction,
@@ -50,13 +52,12 @@ class CategoryTransaction extends Component {
     const { openCategoryEdit, openTagEdit, selectedCategory, selectedTag } = this.state;
     const setTags = transaction.tags.map(t => {return {label: t, value: t}})
 
-
-
     return (
       <ListGroup.Item className='transaction-row'>
           <Container>
             <Row>
-              <Col xs={5} className='category-transactions-name'>{ transaction.name }</Col>
+              <Col xs={3} className='category-transactions-name'>{ transaction.name }</Col>
+              <Col xs={2} className='category-transactions-date'>{ this.formatDate(transaction.date) }</Col>
 
               <Col xs={2} className='category-transactions-name'>
                 <CreatableSelect
