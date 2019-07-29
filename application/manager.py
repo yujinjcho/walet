@@ -88,11 +88,12 @@ def get_transactions(account_id, month):
 
             transactions.extend(item_transactions)
 
+    settled_transactions = [t for t in transactions if not t['pending']]
 
     if error:
-        result = { 'result': transactions, 'error': error }
+        result = { 'result': settled_transactions, 'error': error }
     else:
-        result = { 'result': transactions }
+        result = { 'result': settled_transactions }
 
     return result
 
