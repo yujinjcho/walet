@@ -33,7 +33,7 @@ class LandingPageNavigation extends Component {
               About
             </Nav.Link>
 
-            <Nav.Link href={this.props.authUrl} className='landing-page-links'>
+            <Nav.Link href={this.props.authUrl || '/'} className='landing-page-links'>
               Sign In
             </Nav.Link>
           </Nav>
