@@ -1,0 +1,61 @@
+
+.landing-page-body {
+  margin-left: 200px;
+  margin-right: 200px;
+}
+
+.login-logo {
+  font-size: 35px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-section {
+  width: 1000;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+  margin-bottom: 50px;
+}
+
+.demo-section {
+  margin-bottom: 10px;
+}
+
+.main-section {
+  height: 750px;
+  background: url(/img/fabian-blank-pElSkGRA2NU-unsplash.jpg);
+  background-size: cover;
+  overflow: hidden;
+  font-family: Helvetica;
+  padding-left: 100px;
+}
+
+.main-section-title {
+  margin-top: 300px;
+  font-size: 400%;
+  height: 300;
+  display: block;
+  line-height: 85px;
+}
+
+.get-started {
+  margin-top: 30px;
+}
+
+.main-section-description {
+  margin-top: 30px;
+  font-size: 120%;
+}
+
+.main-section-1 {
+  height: 200px;
+  border-bottom-color: #DDDDDD;
+  border-bottom-style: solid;
+  border-bottom-width: thin;
+}
+
+.description-bullets {
+  margin-top: 60px;
+}
