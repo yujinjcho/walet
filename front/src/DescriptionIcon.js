@@ -5,7 +5,7 @@ import './DescriptionIcon.css'
 const DescriptionIcon = (props) => {
   return (
     <div className='description-icon'>
-      <i class={`fas fa-${props.icon} fa-2x`}></i>
+      <i className={`fas fa-${props.icon} fa-2x`}></i>
     </div>
   );
 }

@@ -33,7 +33,7 @@ const LandingPage = () => {
 
   return (
     <>
-      <LandingPageNavigation/>
+      <LandingPageNavigation authUrl={authRedirectUrl} />
       <div className='landing-page-body'>
         <div className='main-section'>
           <div className='main-section-title'>
@@ -45,7 +45,9 @@ const LandingPage = () => {
             Get a clear view of your spending
           </div>
           <Button className='get-started'>
-            Get Started
+            <a className='get-started-button' href={authRedirectUrl}>
+              Get Started
+            </a>
           </Button>
         </div>
         <div className='main-section-1'>

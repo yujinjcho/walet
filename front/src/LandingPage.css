@@ -59,3 +59,12 @@
 .description-bullets {
   margin-top: 60px;
 }
+
+.get-started-button {
+  color: white;
+}
+
+.get-started-button:hover {
+  color: white;
+  text-decoration: none;
+}

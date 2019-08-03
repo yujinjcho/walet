@@ -7,17 +7,14 @@ import './LandingPageNavigation.css';
 
 class LandingPageNavigation extends Component {
 
-  homeHandler = () => this.props.history.push('/');
-
-  logoutHandler = () => this.props.history.push('/logout');
-
-  accountHandler = () => this.props.history.push('/account')
+  redirectTo = (path) => () => this.props.history.push(path)
 
   render() {
+
     return (
 
       <Navbar className='landing-page-navbar' collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <Navbar.Brand className='logo' href="#" onClick={ this.homeHandler } >
+        <Navbar.Brand className='logo' href="#" onClick={ this.redirectTo('/') } >
           Simplified
         </Navbar.Brand>
 
@@ -26,16 +23,17 @@ class LandingPageNavigation extends Component {
           <Nav className="mr-auto">
           </Nav>
           <Nav>
-            <Nav.Link className='landing-page-links' onClick={ this.accountHandler }>
+            <Nav.Link className='landing-page-links' onClick={ this.redirectTo('/how-it-works') }>
               How it Works
             </Nav.Link>
-            <Nav.Link className='landing-page-links' onClick={ this.accountHandler }>
+            <Nav.Link className='landing-page-links' onClick={ this.redirectTo('/contact') }>
               Contact
             </Nav.Link>
-            <Nav.Link className='landing-page-links' onClick={ this.logoutHandler }>
+            <Nav.Link className='landing-page-links' onClick={ this.redirectTo('/about') }>
               About
             </Nav.Link>
-            <Nav.Link className='landing-page-links' onClick={ this.logoutHandler }>
+
+            <Nav.Link href={this.props.authUrl} className='landing-page-links'>
               Sign In
             </Nav.Link>
           </Nav>

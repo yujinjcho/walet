@@ -8,12 +8,16 @@
 .links {
   text-align: center;
   margin-top: 30px;
-  color: #444444;
+  color: #666666;
 }
 
 .footer-company-name {
   text-align: center;
   margin-top: 20px;
   width: 100%;
-  color: #444444;
+  color: #666666;
+}
+
+.footer-link:hover {
+  cursor: pointer;
 }

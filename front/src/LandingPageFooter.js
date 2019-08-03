@@ -1,10 +1,14 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import { withRouter } from 'react-router-dom';
 
 import './LandingPageFooter.css'
 
+const redirectTo = (props, path) => () => props.history.push(path)
+
 const LandingPageFooter = (props) => {
+
 
   return (
     <div className='landing-page-footer-container'>
@@ -12,16 +16,22 @@ const LandingPageFooter = (props) => {
       <Row className='links'>
         <Col xs={3}></Col>
 
-        <Col xs={2}>
-          How it works
+        <Col xs={2} onClick={ redirectTo(props, '/how-it-works') }>
+          <div className='footer-link' onClick={ redirectTo(props, '/how-it-works') }>
+            How it works
+          </div>
         </Col>
         |
         <Col xs={2}>
-          Contact
+          <div className='footer-link' onClick={ redirectTo(props, '/contact') }>
+            Contact
+          </div>
         </Col>
         |
         <Col xs={2}>
-          About
+          <div className='footer-link' onClick={ redirectTo(props, '/about') }>
+            About
+          </div>
         </Col>
 
         <Col xs={3}></Col>
@@ -37,4 +47,4 @@ const LandingPageFooter = (props) => {
   );
 }
 
-export default LandingPageFooter;
+export default withRouter(LandingPageFooter);
