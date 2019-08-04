@@ -10,8 +10,8 @@ import Form from 'react-bootstrap/Form';
 import CategorySection from './CategorySection';
 import './Summary.css';
 import './TotalSection.css';
-import helper from './helper';
-import values from './values';
+import helper from '../helper';
+import values from '../values';
 
 class Summary extends Component {
   state = {

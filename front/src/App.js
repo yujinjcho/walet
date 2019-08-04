@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import SummaryContainer from './SummaryContainer';
 import LandingPage from './LandingPage';
 import Logout from './Logout';
 import Auth from './Auth';
@@ -9,6 +8,7 @@ import AccountPage from './AccountPage';
 import HowItWorks from './HowItWorks';
 import About from './About';
 import Contact from './Contact';
+import SummaryContainer from './Summary';
 
 import api from './api';
 

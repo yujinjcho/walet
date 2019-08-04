@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Summary from './Summary';
-import api from './api';
-import values from './values';
+import api from '../api';
+import values from '../values';
 
-import withLogin from './withLogin';
+import withLogin from '../withLogin';
 
 class SummaryContainer extends Component {
   state = {
