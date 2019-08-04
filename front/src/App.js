@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import LandingPage from './LandingPage';
 import Logout from './Logout';
 import Auth from './Auth';
 import AccountPage from './AccountPage';
-import HowItWorks from './HowItWorks';
-import About from './About';
-import Contact from './Contact';
 import SummaryContainer from './Summary';
 
-import api from './api';
+import { LandingPage, About, HowItWorks, Contact }  from './LandingPage';
 
+
+import api from './api';
 
 const App = () => {
   const [authRedirectUrl, setAuthRedirectUrl] = useState(undefined);
@@ -39,6 +37,7 @@ const App = () => {
               <Route exact path="/account" component={AccountPage} />
               <Route exact path ="/logout" component={Logout} />
               <Route exact path ="/auth" component={Auth} />
+
               <Route exact path ="/login" render={() => <LandingPage authUrl={authRedirectUrl} />} />
               <Route exact path ="/how-it-works" render={() => <HowItWorks authUrl={authRedirectUrl} />} />
               <Route exact path ="/about" render={() => <About authUrl={authRedirectUrl} />} />
