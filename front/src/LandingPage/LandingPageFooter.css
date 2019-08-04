@@ -1,0 +1,23 @@
+.landing-page-footer-container {
+  height: 140px;
+  border-top-color: #DDDDDD;
+  border-top-style: solid;
+  border-top-width: thin;
+}
+
+.links {
+  text-align: center;
+  margin-top: 30px;
+  color: #666666;
+}
+
+.footer-company-name {
+  text-align: center;
+  margin-top: 20px;
+  width: 100%;
+  color: #666666;
+}
+
+.footer-link:hover {
+  cursor: pointer;
+}

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
-import authHelper from './authHelper';
-import api from './api';
+import authHelper from '../authHelper';
+import api from '../api';
 
 import './EditTag.css';
 
