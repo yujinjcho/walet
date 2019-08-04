@@ -25,7 +25,7 @@
 
 .main-section {
   height: 750px;
-  background: url(/img/fabian-blank-pElSkGRA2NU-unsplash.jpg);
+  background: url(./piggy-background.jpg);
   background-size: cover;
   overflow: hidden;
   font-family: Helvetica;
