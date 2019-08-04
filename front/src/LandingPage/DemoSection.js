@@ -2,6 +2,9 @@ import React from 'react';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
+// import bank from './../../public/img/bank-demo.png'
+import bank from './bank-demo.png';
+
 import './DemoSection.css'
 
 const DemoSection = (props) => {
@@ -23,7 +26,8 @@ const DemoSection = (props) => {
         <Col xs={6}>
           <div className='demo-image-parent'>
             <div className='demo-image-child demo-image-bank'>
-              <img className='demo-image' src="/img/bank-demo.png" alt="Bank Integration"></img>
+              {/* <img className='demo-image' src="/img/bank-demo.png" alt="Bank Integration"></img> */}
+              <img className='demo-image' src={bank} alt="Bank Integration"></img>
             </div>
           </div>
         </Col>
