@@ -8,6 +8,7 @@ mv .gitignore_temp .gitignore
 cd front
 REACT_APP_WEBHOOK_URL=https://g2sfivq5i5.execute-api.us-west-2.amazonaws.com/prod/v1/webhook npm run build
 cd ..
+rm -r application/build
 mv front/build application/
 
 git add .
