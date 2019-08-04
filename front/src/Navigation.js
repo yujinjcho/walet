@@ -17,7 +17,7 @@ class Navigation extends Component {
 
       <Navbar className='walet-navbar' collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Navbar.Brand href="#" onClick={ this.homeHandler } >
-          Walet
+          Simplified
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
