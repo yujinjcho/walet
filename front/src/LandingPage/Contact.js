@@ -5,17 +5,37 @@ import Form from 'react-bootstrap/Form';
 import LandingPageNavigation from './LandingPageNavigation';
 import { withRouter } from 'react-router-dom';
 
+import api from '../api';
+
 import './Contact.css';
 
 const handleSubmit = (props) => (event) => {
-  const form = event.currentTarget;
   event.preventDefault();
+  const form = event.target;
+  const email = form.elements.email.value;
+  const subject = form.elements.subject.value;
+  const message = form.elements.message.value;
 
-  // TODO: upload message
-
-  alert('Your message has been sent!')
-  props.history.push('/');
-  console.log(form);
+  if (email && subject && message ) {
+    const request = {
+      email: email,
+      subject: subject,
+      message: message,
+    };
+    const headers = { 'Content-Type': 'application/json' };
+    api.fetchHelper('/api/contact', {
+      headers,
+      method: 'POST',
+      body: JSON.stringify(request)
+    })
+    .then(_ => {
+      alert('Your message has been sent!')
+      props.history.push('/')
+    })
+    .catch(_ => alert('There was an issue sending the message!'))
+  } else {
+    alert('requires valid fields')
+  };
 };
 
 const Contact = (props) => {
@@ -30,19 +50,19 @@ const Contact = (props) => {
           </div>
 
           <Form onSubmit={handleSubmit(props)}>
-            <Form.Group controlId="exampleForm.ControlInput1">
+            <Form.Group controlId="form.email">
               <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="name@example.com" />
+              <Form.Control name="email" type="email" placeholder="name@example.com" />
             </Form.Group>
 
-            <Form.Group controlId="exampleForm.ControlInput2">
+            <Form.Group controlId="form.subject">
               <Form.Label>Subject </Form.Label>
-              <Form.Control />
+              <Form.Control name="subject" />
             </Form.Group>
 
-            <Form.Group controlId="exampleForm.ControlTextarea1">
+            <Form.Group controlId="form.message">
               <Form.Label>Message</Form.Label>
-              <Form.Control as="textarea" rows="3" />
+              <Form.Control name="message" as="textarea" rows="3" />
             </Form.Group>
 
             <Button variant="primary" type="submit">
