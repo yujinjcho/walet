@@ -68,3 +68,10 @@ CREATE TABLE plaid_transactions (
   item_id           TEXT REFERENCES plaid_items(item_id),
   UNIQUE            (transaction_id, account_id)
 );
+
+CREATE TABLE message (
+  message_id SERIAL PRIMARY KEY,
+  email TEXT NOT NULL,
+  subject TEXT NOT NULL,
+  message TEXT NOT NULL
+);
