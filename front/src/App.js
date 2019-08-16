@@ -8,7 +8,6 @@ import SummaryContainer from './Summary';
 
 import { LandingPage, About, HowItWorks, Contact }  from './LandingPage';
 
-
 import api from './api';
 
 const App = () => {

@@ -1,0 +1,16 @@
+.about-header {
+  font-size: 3em;
+}
+
+.about-container {
+  margin-top: 70px;
+  margin-left: 120px;
+  margin-right: 120px;
+  font-family: Helvetica, sans-serif;
+  color: #333333;
+}
+
+.about-description {
+  margin-top: 40px;
+  font-size: 1.2em;
+}

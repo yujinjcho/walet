@@ -146,6 +146,17 @@ def validate_account():
     response = jsonify({'result': account_id}) if account_id else abort(400)
     return response
 
+@app.route('/api/contact', methods=['POST'])
+def contact():
+    contact_data = request.json
+    updated_row = data.store_message(
+        contact_data['email'],
+        contact_data['subject'],
+        contact_data['message']
+    )
+    response = {'result': {'updated_count': updated_row}}
+    return jsonify(response)
+
 @app.route('/api/plaid/webhook', methods=['POST'])
 def plaid_webhook():
     webhook = request.json

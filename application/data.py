@@ -219,6 +219,13 @@ def delete_transactions(item_id, transaction_ids):
     """
     return _delete(query, params)
 
+def store_message(email, subject, message):
+    query = """
+      INSERT INTO message (email, subject, message)
+        VALUES (%s, %s, %s)
+    """
+    return _insert(query, (email, subject, message))
+
 def _insert(query, params):
     db = _connection()
     try:

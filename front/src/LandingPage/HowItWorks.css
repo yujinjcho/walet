@@ -1,0 +1,21 @@
+.how-it-works-header {
+  font-size: 3em;
+}
+
+.how-it-works-container {
+  margin-top: 70px;
+  margin-left: 120px;
+  margin-right: 120px;
+  font-family: Helvetica, sans-serif;
+  color: #333333;
+}
+
+.how-it-works-description {
+  margin-top: 40px;
+  font-size: 1.2em;
+}
+
+
+.demo-section {
+  margin-bottom: 50px;
+}
