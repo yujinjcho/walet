@@ -14,7 +14,7 @@ export default Wrapped => {
     handleError = error => {
       this.setState({ accountId: null });
       authHelper.removeToken();
-      this.props.history.push('/')
+      this.props.history.push('/home')
     }
 
     componentWillMount() {
