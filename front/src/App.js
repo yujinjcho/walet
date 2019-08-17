@@ -37,7 +37,7 @@ const App = () => {
               <Route exact path ="/logout" component={Logout} />
               <Route exact path ="/auth" component={Auth} />
 
-              <Route exact path ="/login" render={() => <LandingPage authUrl={authRedirectUrl} />} />
+              <Route exact path ="/home" render={() => <LandingPage authUrl={authRedirectUrl} />} />
               <Route exact path ="/how-it-works" render={() => <HowItWorks authUrl={authRedirectUrl} />} />
               <Route exact path ="/about" render={() => <About authUrl={authRedirectUrl} />} />
               <Route exact path ="/contact" render={() => <Contact authUrl={authRedirectUrl} />} />
