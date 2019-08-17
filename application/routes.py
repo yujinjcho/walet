@@ -9,6 +9,13 @@ from application import helper
 from application import google_auth
 from application import manager
 
+@app.before_request
+def before_request():
+    if request.url.startswith('http://'):
+        url = request.url.replace('http://', 'https://', 1)
+        code = 301
+        return redirect(url, code=code)
+
 @app.route('/', methods=['GET'])
 def root():
     if app.config['APPLICATION_ENVIRONMENT'] == 'development':
