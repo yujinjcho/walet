@@ -58,6 +58,19 @@ class Summary extends Component {
     );
   }
 
+  renderTotal(total) {
+    return (
+      <ListGroup.Item className='total-section entire-total'>
+        <Container>
+          <Row>
+            <Col xs={9}>Total</Col>
+            <Col className='category-subtotal' >{ Math.round(total) }</Col>
+          </Row>
+        </Container>
+      </ListGroup.Item>
+    );
+  }
+
   render() {
     const { accountId, summaryData, getSummaryData, currentMonth } = this.props;
 
@@ -107,14 +120,8 @@ class Summary extends Component {
                     />)
                   }
 
-                  <ListGroup.Item className='total-section entire-total'>
-                    <Container>
-                      <Row>
-                        <Col xs={9}>Total</Col>
-                        <Col className='category-subtotal' >{ Math.round(total) }</Col>
-                      </Row>
-                    </Container>
-                  </ListGroup.Item>
+                  {this.renderTotal(total)}
+
                 </ListGroup>
 
               </Col>
