@@ -13,37 +13,10 @@
   margin-left: 10px;
 }
 
-.active-tags {
-  min-width: 400px;
-}
-
-.active-date {
-  min-width: 400px;
-}
-
-.summary-controller {
-  padding-bottom: 15px;
-}
-
 .date-controller {
   padding-bottom: 10px;
 }
 
 .entire-total {
   color: #444;
-}
-
-.controller-section {
-  border-radius: 0px !important;
-  background: #F8F6F3 !important;
-}
-
-.date-tag-select {
-  padding-bottom: 10px;
-  padding-top: 10px
-}
-
-.toggle-tags {
-  padding-top: 10px;
-  padding-bottom: 10px;
 }

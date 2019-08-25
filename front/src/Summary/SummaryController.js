@@ -4,9 +4,10 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Row from 'react-bootstrap/Row';
-import Select from 'react-select';
-
 import values from '../values';
+import ControllerSelect from './ControllerSelect';
+
+import './SummaryController.css';
 
 const convertToOptions = (input) => input.map(x => { return { value:x, label:x } });
 
@@ -32,57 +33,28 @@ const SummaryController = (props) => {
             <ListGroup.Item className='controller-section'>
               <Container>
 
-                <Row className='date-tag-select'>
-                  <Col xs={1} >
-                    <div>
-                      Mode
-                    </div>
-                  </Col>
-                  <Col xs={3} >
-                      <Select
-                        className='active-date'
-                        defaultValue={ modeOptions.find(x => x.value === 'Rules') }
-                        options={ modeOptions }
-                        onChange={ updateMode }
-                      />
-                  </Col>
-                </Row>
+                <ControllerSelect
+                  label='Mode'
+                  defaultValue={ modeOptions.find(x => x.value === 'Rules') }
+                  options={ modeOptions }
+                  onChange={ updateMode }
+                />
 
-                <Row className='date-tag-select'>
-                  <Col xs={1} >
-                    <div>
-                      Date
-                    </div>
-                  </Col>
-                  <Col xs={3} >
-                      <Select
-                        className='active-date'
-                        label='some label'
-                        defaultValue={ monthOptions.find(x => x.value === currentMonth) }
-                        options={ monthOptions }
-                        onChange= { updateMonth }
-                      />
-                  </Col>
-                </Row>
+                <ControllerSelect
+                  label='Date'
+                  defaultValue={ monthOptions.find(x => x.value === currentMonth) }
+                  options={ monthOptions }
+                  onChange= { updateMonth }
+                />
 
-                <Row className='date-tag-select'>
-                  <Col xs={1} >
-                    <div>
-                      Tags
-                    </div>
-                  </Col>
-                  <Col xs={3} >
-                    <Select
-                      className="active-tags"
-                      isMulti
-                      tags
-                      value = { selectedTagOptions }
-                      options={ tagOptions }
-                      onChange = {handleActiveTagChange }
-                    />
-                  </Col>
-
-                </Row>
+                <ControllerSelect
+                  label='Tags'
+                  isMulti
+                  tags
+                  value = { selectedTagOptions }
+                  options={ tagOptions }
+                  onChange = {handleActiveTagChange }
+                />
 
                 <Row className='toggle-tags'>
                   <Col xs={3} >
