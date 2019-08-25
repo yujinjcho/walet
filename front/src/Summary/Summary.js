@@ -9,6 +9,7 @@ import CategorySection from './CategorySection';
 import './Summary.css';
 import SummaryController from './SummaryController';
 import './TotalSection.css';
+import BudgetSection from './BudgetSection';
 
 
 class Summary extends Component {
@@ -18,7 +19,8 @@ class Summary extends Component {
     selectTags: ['exclude'],
     shouldExcludeTags: true,
     currentYear: 2019,
-    mode: 'Rules',
+    // mode: 'Rules',
+    mode: 'Budget',
   }
 
   sortCategories = (summary) => summary.slice().sort((x,y) => y.amount - x.amount)
@@ -58,34 +60,21 @@ class Summary extends Component {
     );
   }
 
-  renderTotal(total) {
-    return (
-      <ListGroup.Item className='total-section entire-total'>
-        <Container>
-          <Row>
-            <Col xs={9}>Total</Col>
-            <Col className='category-subtotal' >{ Math.round(total) }</Col>
-          </Row>
-        </Container>
-      </ListGroup.Item>
-    );
-  }
-
   render() {
     const { accountId, summaryData, getSummaryData, currentMonth } = this.props;
 
     if (summaryData) {
-      const { tags, categories, tagRules, categoryRules, transactions } = summaryData;
+      const { budget, tags, categories, tagRules, categoryRules, transactions } = summaryData;
 
       if (categories.length === 0 && transactions.length > 0) {
         getSummaryData();
       }
 
-      const { error, success, selectTags, shouldExcludeTags } = this.state
+      const { mode, error, success, selectTags, shouldExcludeTags } = this.state
 
       const updatedTransactions = helper.applyRules(transactions, categoryRules, tagRules, selectTags, shouldExcludeTags)
       const summary = helper.createSummary(updatedTransactions);
-      const total = summary.map(x => x.amount).reduce((acc,x) => acc + x, 0);
+      const sortedCategories = this.sortCategories(summary)
 
       return (
         <div className="summary-container">
@@ -97,6 +86,7 @@ class Summary extends Component {
             <SummaryController
               currentMonth={currentMonth}
               selectTags={selectTags}
+              currentMode={mode}
               tags={tags}
               updateMode={this.updateMode}
               updateMonth={this.updateMonth}
@@ -104,23 +94,25 @@ class Summary extends Component {
               toggleShouldExcludeTags={this.toggleShouldExcludeTags}
             />
 
+            {/* TODO: if budget mode render buget */}
             <Row>
               <Col xs={12} >
                 <ListGroup>
-                  { this.sortCategories(summary).map(category =>
-                    <CategorySection
-                      key={category.category}
-                      category={category}
-                      allCategories={ categories.map(x => { return {value: x, label: x}}) }
-                      allTags={ tags.map(x => {return {value: x, label: x}}) }
-                      setError={ this.setError }
-                      setSuccess={ this.setSuccess }
-                      accountId= { accountId }
-                      getSummaryData = { getSummaryData }
-                    />)
-                  }
 
-                  {this.renderTotal(total)}
+                  { mode === "Rules"
+                    ? <CategorySection
+                        categories={sortedCategories}
+                        allCategories={ categories.map(x => { return {value: x, label: x}}) }
+                        allTags={ tags.map(x => {return {value: x, label: x}}) }
+                        setError={ this.setError }
+                        setSuccess={ this.setSuccess }
+                        accountId= { accountId }
+                        getSummaryData = { getSummaryData }
+                      />
+                    : mode === "Budget"
+                      ? <BudgetSection categories={sortedCategories} budget={budget} />
+                      : undefined
+                 }
 
                 </ListGroup>
 

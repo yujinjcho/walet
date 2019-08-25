@@ -14,6 +14,7 @@ const convertToOptions = (input) => input.map(x => { return { value:x, label:x }
 const SummaryController = (props) => {
   const {
     currentMonth,
+    currentMode,
     selectTags,
     tags,
     handleActiveTagChange,
@@ -35,7 +36,7 @@ const SummaryController = (props) => {
 
                 <ControllerSelect
                   label='Mode'
-                  defaultValue={ modeOptions.find(x => x.value === 'Rules') }
+                  defaultValue={ modeOptions.find(x => x.value === currentMode) }
                   options={ modeOptions }
                   onChange={ updateMode }
                 />
