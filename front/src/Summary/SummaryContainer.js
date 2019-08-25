@@ -11,7 +11,6 @@ class SummaryContainer extends Component {
     categoryRules: undefined,
     tagRules: undefined,
     tags: undefined,
-    budget: undefined,
     categories: undefined,
     // currentMonth: values.months[new Date().getMonth()],
     // TODO: fix this
@@ -44,15 +43,6 @@ class SummaryContainer extends Component {
           categories,
         ] = res;
 
-        const budget = [
-          {"category_name": "Food and Drink", "budget":500},
-          {"category_name": "Grocery", "budget":400},
-          {"category_name": "Recreation", "budget":200},
-          {"category_name": "Travel", "budget":100},
-          {"category_name": "Misc", "budget":100},
-          {"category_name": "Shops", "budget":300}
-        ];
-
         if (transactions.error) {
           alert(transactions.error);
         }
@@ -62,7 +52,6 @@ class SummaryContainer extends Component {
           categoryRules: categoryRules.result,
           tagRules: tagRules.result,
           tags: tags.result.slice().sort(),
-          budget: budget,
           categories: categories.result.slice().sort(),
         });
       })
@@ -74,12 +63,11 @@ class SummaryContainer extends Component {
 
   render() {
     const { accountId } = this.props;
-    const {transactions, tags, budget, categories, tagRules, categoryRules} = this.state;
+    const {transactions, tags, categories, tagRules, categoryRules} = this.state;
     const summaryData = transactions && tags && categories && tagRules && categoryRules
       ? {
         transactions: transactions,
         tags: tags,
-        budget: budget,
         categories: categories,
         tagRules: tagRules,
         categoryRules: categoryRules,

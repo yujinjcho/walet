@@ -64,7 +64,7 @@ class Summary extends Component {
     const { accountId, summaryData, getSummaryData, currentMonth } = this.props;
 
     if (summaryData) {
-      const { budget, tags, categories, tagRules, categoryRules, transactions } = summaryData;
+      const { tags, categories, tagRules, categoryRules, transactions } = summaryData;
 
       if (categories.length === 0 && transactions.length > 0) {
         getSummaryData();
@@ -110,7 +110,7 @@ class Summary extends Component {
                         getSummaryData = { getSummaryData }
                       />
                     : mode === "Budget"
-                      ? <BudgetSection categories={sortedCategories} budget={budget} />
+                      ? <BudgetSection categories={sortedCategories} />
                       : undefined
                  }
 
