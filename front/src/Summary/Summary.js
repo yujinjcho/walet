@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
-import Select from 'react-select';
-import Form from 'react-bootstrap/Form';
-
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Row from 'react-bootstrap/Row';
+import helper from '../helper';
 import CategorySection from './CategorySection';
 import './Summary.css';
+import SummaryController from './SummaryController';
 import './TotalSection.css';
-import helper from '../helper';
-import values from '../values';
+
 
 class Summary extends Component {
   state = {
@@ -19,7 +17,8 @@ class Summary extends Component {
     success: null,
     selectTags: ['exclude'],
     shouldExcludeTags: true,
-    currentYear: 2019
+    currentYear: 2019,
+    mode: 'Rules',
   }
 
   sortCategories = (summary) => summary.slice().sort((x,y) => y.amount - x.amount)
@@ -35,6 +34,10 @@ class Summary extends Component {
       this.props.updateMonth(data.value)
     }
   };
+
+  updateMode = (data) => {
+    this.setState({ mode: data.value });
+  }
 
   toggleShouldExcludeTags = (data) => {
     if (data.target.id === 'exclude') {
@@ -59,7 +62,6 @@ class Summary extends Component {
       const updatedTransactions = helper.applyRules(transactions, categoryRules, tagRules, selectTags, shouldExcludeTags)
       const summary = helper.createSummary(updatedTransactions);
       const total = summary.map(x => x.amount).reduce((acc,x) => acc + x, 0);
-      const monthOptions = values.months.map(x => { return { value:x, label:x }});
 
       return (
         <div className="summary-container">
@@ -73,78 +75,15 @@ class Summary extends Component {
               </Col>
             </Row>
 
-            <Row className='summary-controller'>
-              <Col xs={12} >
-                <ListGroup>
-                  <ListGroup.Item className='controller-section'>
-                    <Container>
-
-                      <Row className='date-tag-select'>
-                        <Col xs={1} >
-                          <div>
-                            Date
-                          </div>
-                        </Col>
-                        <Col xs={3} >
-                            <Select
-                              className='active-date'
-                              label='some label'
-                              defaultValue={ monthOptions.find(x => x.value === currentMonth) }
-                              options={ monthOptions }
-                              onChange= { this.updateMonth }
-                            />
-                        </Col>
-                      </Row>
-
-                      <Row className='date-tag-select'>
-                        <Col xs={1} >
-                          <div>
-                            Tags
-                          </div>
-                        </Col>
-                        <Col xs={3} >
-                          <Select
-                            className="active-tags"
-                            isMulti
-                            tags
-                            value = { selectTags.map(x => { return { value: x, label: x } }) }
-                            options={ tags.map(x => {return {value: x, label: x}}) }
-                            onChange = {this.handleActiveTagChange }
-                          />
-                        </Col>
-
-                      </Row>
-
-                      <Row className='toggle-tags'>
-                        <Col xs={3} >
-                          <Form.Check
-                            defaultChecked
-                            type="radio"
-                            label='Exclude tags'
-                            name="excludeTags"
-                            id="exclude"
-                            onClick = { this.toggleShouldExcludeTags }
-                          />
-                        </Col>
-
-                        <Col xs={3} >
-                          <Form.Check
-                            type="radio"
-                            label='Only show tags'
-                            name="excludeTags"
-                            id="notExclude"
-                            onClick = { this.toggleShouldExcludeTags }
-                          />
-                        </Col>
-                      </Row>
-
-                    </Container>
-
-                  </ListGroup.Item>
-                </ListGroup>
-              </Col>
-            </Row>
-
+            <SummaryController
+              currentMonth={currentMonth}
+              selectTags={selectTags}
+              tags={tags}
+              updateMode={this.updateMode}
+              updateMonth={this.updateMonth}
+              handleActiveTagChange={this.handleActiveTagChange}
+              toggleShouldExcludeTags={this.toggleShouldExcludeTags}
+            />
 
             <Row>
               <Col xs={12} >
