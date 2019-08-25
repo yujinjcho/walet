@@ -47,6 +47,17 @@ class Summary extends Component {
     }
   };
 
+  renderAlerts(error, success) {
+    return (
+      <Row className='action-alerts'>
+        <Col xs={12} >
+          {error && <Alert variant="danger">{error}</Alert>}
+          {success && <Alert variant="success">{success}</Alert>}
+        </Col>
+      </Row>
+    );
+  }
+
   render() {
     const { accountId, summaryData, getSummaryData, currentMonth } = this.props;
 
@@ -68,12 +79,7 @@ class Summary extends Component {
 
           <Container>
 
-            <Row className='action-alerts'>
-              <Col xs={12} >
-                {error && <Alert variant="danger">{error}</Alert>}
-                {success && <Alert variant="success">{success}</Alert>}
-              </Col>
-            </Row>
+            { this.renderAlerts(error, success) }
 
             <SummaryController
               currentMonth={currentMonth}
