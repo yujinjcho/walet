@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import Table from 'react-bootstrap/Table';
+import React, { useEffect, useState } from 'react';
+import { Row } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
-import './BudgetSection.css'
+import Table from 'react-bootstrap/Table';
+import './BudgetSection.css';
 
 const BudgetSection = (props) => {
-  const [originalBudget, setOriginalBudget] = useState({});
   const [budgets, setBudgets] = useState({});
 
   useEffect(() => {
@@ -18,8 +20,7 @@ const BudgetSection = (props) => {
     ];
     const budgetByName = budget.reduce((acc, x) => {acc[x.category_name] = x.budget; return acc}, {})
 
-    setOriginalBudget(budgetByName);
-    setBudgets(budgetByName);
+    setBudgets(budgetByName)
   }, []);
 
   const handleBudgetChange = (categoryName) => (data) => {
@@ -27,12 +28,17 @@ const BudgetSection = (props) => {
     setBudgets({...budgets, ...{[categoryName]: newBudgetValue}});
   }
 
+  const updateBudget = () => {
+    // make post request with new budgets for month
+    console.log(budgets);
+  }
+
   const { categories } = props;
   const totalBudget = Object.values(budgets).reduce((a,b) => a + b, 0);
   const totalSpent = categories.map(x => x.amount).reduce((acc,x) => acc + x, 0);
   return (
     <>
-      <Table bordered hover>
+      <Table bordered>
         <thead>
           <tr>
             <th style={{width:"55%"}}>Category</th>
@@ -72,6 +78,15 @@ const BudgetSection = (props) => {
         </tbody>
       </Table>
 
+      <Container>
+
+      <Row className="float-right">
+          <Button onClick={updateBudget}>
+            Save Changes
+          </Button>
+      </Row>
+
+      </Container>
     </>
   );
 }
