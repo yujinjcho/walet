@@ -78,7 +78,7 @@ const BudgetSection = (props) => {
           { categories.map(category =>
             <tr key={category.category}>
               <td>{category.category}</td>
-              <td>{Math.round(category.amount)}</td>
+              <td className='cell-numbers'>{Math.round(category.amount)}</td>
               <td>
                 <Form>
                   <Form.Control
@@ -89,17 +89,22 @@ const BudgetSection = (props) => {
                   />
                 </Form>
               </td>
-              <td>{Math.round((budgets[category.category] || 0) - category.amount)}</td>
+              <td className='cell-numbers'>{Math.round((budgets[category.category] || 0) - category.amount)}</td>
             </tr>
           )}
 
           { budgetCategoriesWithNoSpending.map(category =>
             <tr key={category}>
               <td>{category}</td>
-              <td>{0}</td>
+              <td>
+                <div className='cell-numbers'>
+                  {0}
+                </div>
+              </td>
               <td>
                 <Form>
                   <Form.Control
+                    className='input-cell-numbers'
                     value={ budgets[category] || "0" }
                     as='input'
                     type="number"
@@ -107,15 +112,31 @@ const BudgetSection = (props) => {
                   />
                 </Form>
               </td>
-              <td>{Math.round(budgets[category] || 0)}</td>
+              <td>
+                <div className='cell-numbers'>
+                  {Math.round(budgets[category] || 0)}
+                </div>
+              </td>
             </tr>
           )}
 
           <tr className='budget-total'>
             <td>Total</td>
-            <td>{Math.round(totalSpent)}</td>
-            <td>{Math.round(totalBudget)}</td>
-            <td>{Math.round(totalBudget - totalSpent)}</td>
+            <td className='cell-numbers'>
+              <div className='cell-numbers'>
+                {Math.round(totalSpent)}
+              </div>
+            </td>
+            <td className='cell-numbers'>
+              <div className='cell-numbers'>
+                {Math.round(totalBudget)}
+              </div>
+            </td>
+            <td className='cell-numbers'>
+              <div className='cell-numbers'>
+                {Math.round(totalBudget - totalSpent)}
+              </div>
+            </td>
           </tr>
 
         </tbody>
