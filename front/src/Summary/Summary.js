@@ -19,8 +19,7 @@ class Summary extends Component {
     selectTags: ['exclude'],
     shouldExcludeTags: true,
     currentYear: 2019,
-    // mode: 'Rules',
-    mode: 'Budget',
+    mode: 'Rules',
   }
 
   sortCategories = (summary) => summary.slice().sort((x,y) => y.amount - x.amount)
