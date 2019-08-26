@@ -97,6 +97,14 @@ def get_transactions(account_id, month):
 
     return result
 
+def get_budgets(account_id, month, year):
+    budgets = data.budgets(account_id, month, year)
+    if not budgets:
+        # using -1 to represent default
+        budgets = data.budgets(account_id, "-1", year)
+
+    return budgets
+
 def update_budgets(account_id, budget_update_request):
     month = budget_update_request['month']
     year = budget_update_request['year']

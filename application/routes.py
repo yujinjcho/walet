@@ -118,7 +118,7 @@ def budgets():
                 'category_name': budget[0],
                 'budget': budget[1],
             }
-            for budget in data.budgets(account_id, month, year)
+            for budget in manager.get_budgets(account_id, month, year)
         ]
         return jsonify({'result': result})
 

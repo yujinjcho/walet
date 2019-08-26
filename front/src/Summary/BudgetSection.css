@@ -2,3 +2,7 @@
 .budget-total {
   font-weight:bold;
 }
+
+.budget-update-button {
+  margin-left: 10px;
+}
