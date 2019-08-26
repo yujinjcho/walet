@@ -76,7 +76,6 @@ CREATE TABLE message (
   message TEXT NOT NULL
 );
 
--- apply starting here
 CREATE TABLE budget (
   budget_id         SERIAL PRIMARY KEY,
   account_id        INTEGER REFERENCES account(account_id),
