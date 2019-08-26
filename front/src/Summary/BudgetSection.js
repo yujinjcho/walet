@@ -5,23 +5,32 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import './BudgetSection.css';
+import api from '../api';
+import values from '../values';
+import authHelper from '../authHelper';
 
 const BudgetSection = (props) => {
   const [budgets, setBudgets] = useState({});
+  const { categories, month, year } = props;
+  const monthNumber = values.months.indexOf(month) + 1;
 
-  useEffect(() => {
-    const budget = [
-      {"category_name": "Food and Drink", "budget":500},
-      {"category_name": "Grocery", "budget":400},
-      {"category_name": "Recreation", "budget":200},
-      {"category_name": "Travel", "budget":100},
-      {"category_name": "Misc", "budget":100},
-      {"category_name": "Shops", "budget":300}
-    ];
-    const budgetByName = budget.reduce((acc, x) => {acc[x.category_name] = x.budget; return acc}, {})
+  const fetchBudget = async () => {
+    const headers = {...{ 'Content-Type': 'application/json' }, ...authHelper.header()}
+    const result = await api.fetchHelper(`/api/budgets?month=${monthNumber}&year=${year}`, { headers })
+      .then(res => res.json())
+      .then(res => res.result)
+      .catch(_ => {
+        console.error('failed to retrieve budget info');
+        return [];
+      })
 
-    setBudgets(budgetByName)
-  }, []);
+    const budgetByName = result.reduce((acc, x) => {acc[x.category_name] = x.budget; return acc}, {})
+    setBudgets(budgetByName);
+  };
+
+  useEffect(() => {fetchBudget()}, []);
+
+  useEffect(() => {fetchBudget()}, [month]);
 
   const handleBudgetChange = (categoryName) => (data) => {
     const newBudgetValue = data.target.valueAsNumber || 0;
@@ -29,11 +38,26 @@ const BudgetSection = (props) => {
   }
 
   const updateBudget = () => {
-    // make post request with new budgets for month
-    console.log(budgets);
+    const request = {
+      month: monthNumber,
+      year: year,
+      budgets: Object.keys(budgets).map(b => {return {categoryName: b, budget: budgets[b]}})
+    }
+    const headers = {...{ 'Content-Type': 'application/json' }, ...authHelper.header()}
+    api.fetchHelper(`/api/budgets`, {
+      headers,
+      method: 'POST',
+      body: JSON.stringify(request)
+     })
+      .then(_ => fetchBudget())
   }
 
-  const { categories } = props;
+  // TODO: append section for budgets with no spending
+  const categoriesWithSpending = categories.map(x => x.category);
+  console.log(categoriesWithSpending);
+  const budgetCategoriesWithNoSpending = Object.keys(budgets).filter(x => !categoriesWithSpending.includes(x) )
+  console.log(budgetCategoriesWithNoSpending);
+
   const totalBudget = Object.values(budgets).reduce((a,b) => a + b, 0);
   const totalSpent = categories.map(x => x.amount).reduce((acc,x) => acc + x, 0);
   return (
@@ -65,6 +89,24 @@ const BudgetSection = (props) => {
                 </Form>
               </td>
               <td>{Math.round((budgets[category.category] || 0) - category.amount)}</td>
+            </tr>
+          )}
+
+          { budgetCategoriesWithNoSpending.map(category =>
+            <tr key={category}>
+              <td>{category}</td>
+              <td>{0}</td>
+              <td>
+                <Form>
+                  <Form.Control
+                    value={ budgets[category] || "0" }
+                    as='input'
+                    type="number"
+                    onChange={handleBudgetChange(category)}
+                  />
+                </Form>
+              </td>
+              <td>{Math.round(budgets[category] || 0)}</td>
             </tr>
           )}
 

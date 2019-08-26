@@ -12,9 +12,7 @@ class SummaryContainer extends Component {
     tagRules: undefined,
     tags: undefined,
     categories: undefined,
-    // currentMonth: values.months[new Date().getMonth()],
-    // TODO: fix this
-    currentMonth: values.months[new Date().getMonth() - 1],
+    currentMonth: values.months[new Date().getMonth()],
   };
 
   updateMonth = (month) => {

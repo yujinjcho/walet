@@ -70,7 +70,7 @@ class Summary extends Component {
         getSummaryData();
       }
 
-      const { mode, error, success, selectTags, shouldExcludeTags } = this.state
+      const { currentYear, mode, error, success, selectTags, shouldExcludeTags } = this.state
 
       const updatedTransactions = helper.applyRules(transactions, categoryRules, tagRules, selectTags, shouldExcludeTags)
       const summary = helper.createSummary(updatedTransactions);
@@ -110,7 +110,11 @@ class Summary extends Component {
                         getSummaryData = { getSummaryData }
                       />
                     : mode === "Budget"
-                      ? <BudgetSection categories={sortedCategories} />
+                      ? <BudgetSection
+                          categories={sortedCategories}
+                          month={currentMonth}
+                          year={currentYear}
+                        />
                       : undefined
                  }
 
