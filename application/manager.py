@@ -119,6 +119,7 @@ def update_budgets(account_id, budget_update_request):
           'budget': budget['budget']
         }
         for budget in budget_update_request['budgets']
+        if budget['budget'] > 0
     ]
     return data.create_budgets(updated_budgets)
 
