@@ -1,0 +1,13 @@
+.summary-controller {
+  padding-bottom: 15px;
+}
+
+.controller-section {
+  border-radius: 0px !important;
+  background: #F8F6F3 !important;
+}
+
+.toggle-tags {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}

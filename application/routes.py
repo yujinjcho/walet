@@ -106,6 +106,42 @@ def transactions():
 
     return abort(400)
 
+@app.route('/api/budgets', methods=['GET'])
+def budgets():
+    month = request.args.get('month')
+    year = request.args.get('year')
+    account_id = helper.validate_request(request)
+
+    if account_id:
+        result = [
+            {
+                'category_name': budget[0],
+                'budget': budget[1],
+            }
+            for budget in manager.get_budgets(account_id, month, year)
+        ]
+        return jsonify({'result': result})
+
+    return abort(400)
+
+@app.route('/api/budgets', methods=['POST'])
+def create_budgets():
+    budget_update_request = request.json
+    account_id = helper.validate_request(request)
+    if account_id:
+        updated = manager.update_budgets(account_id, budget_update_request)
+        return jsonify({'result': {'updated_count': updated}})
+    return abort(400)
+
+@app.route('/api/budgets/clear', methods=['POST'])
+def clear_budgets():
+    account_id = helper.validate_request(request)
+    clear_request = request.json
+    if account_id:
+        updated = data.delete_budgets(account_id, clear_request['month'], clear_request['year'])
+        return jsonify({'result': {'updated_count': updated}})
+    return abort(400)
+
 @app.route('/api/plaid_accounts', methods=['GET'])
 def plaid_accounts():
     account_id = helper.validate_request(request)
@@ -169,7 +205,7 @@ def plaid_webhook():
     response = manager.handle_webhook(webhook)
     return response
 
-
+# default
 @app.route('/<path:path>')
 def catch_all(path):
     if app.config['APPLICATION_ENVIRONMENT'] == 'development':

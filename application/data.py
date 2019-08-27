@@ -25,6 +25,48 @@ def tag_rules(account_id):
     """
     return _select(query, (account_id,))
 
+def budgets(account_id, month, year):
+    query = """
+      SELECT
+        b.category,
+        b.budget
+      FROM budget b
+      WHERE b.account_id = %s
+        AND b.month = %s
+        AND b.year = %s
+    """
+    return _select(query, (account_id, month, year))
+
+def delete_budgets(account_id, month, year):
+    query = """
+      DELETE FROM budget
+        WHERE account_id = %s
+          AND month = %s
+          AND year = %s
+    """
+    return _delete(query, (account_id, month, year))
+
+def create_budgets(budgets):
+    query = """
+      INSERT INTO budget (account_id, month, year, category, budget)
+        VALUES %s
+    """
+    budget_params = [
+        (b['account_id'], b['month'], b['year'], b['category'], b['budget'])
+        for b in budgets
+    ]
+    db = _connection()
+    try:
+        with db.cursor() as cur:
+            execute_values(cur, query, budget_params)
+            updated = cur.rowcount
+        db.commit()
+    finally:
+        db.close()
+
+    return updated
+
+
 def categories(account_id):
     'return all categories for user'
 
@@ -43,7 +85,6 @@ def category_rules(account_id):
       WHERE cr.account_id = %s
     """
     return _select(query, (account_id,))
-
 
 def create_category_rule(account_id, rule):
     '''

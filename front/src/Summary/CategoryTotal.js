@@ -1,20 +1,16 @@
-import React, { Component } from 'react';
-import ListGroup from 'react-bootstrap/ListGroup'
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-
+import React from 'react';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Row from 'react-bootstrap/Row';
 import './CategoryTotal.css';
-import './TotalSection.css'
+import './TotalSection.css';
 
-class CategoryTotal extends Component {
-  state = {
-    open: false
-  }
 
-  render() {
-    const { categoryName, amount } = this.props;
-    return (
+const CategoryTotal = (props) => {
+  const { categoryName, amount, onClick } = props;
+  return (
+    <div onClick={onClick}>
       <ListGroup.Item className='total-section'>
         <Container>
           <Row>
@@ -23,8 +19,8 @@ class CategoryTotal extends Component {
           </Row>
         </Container>
       </ListGroup.Item>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default CategoryTotal

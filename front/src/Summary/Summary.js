@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
-import Select from 'react-select';
-import Form from 'react-bootstrap/Form';
-
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Row from 'react-bootstrap/Row';
+import helper from '../helper';
 import CategorySection from './CategorySection';
 import './Summary.css';
+import SummaryController from './SummaryController';
 import './TotalSection.css';
-import helper from '../helper';
-import values from '../values';
+import BudgetSection from './BudgetSection';
+
 
 class Summary extends Component {
   state = {
@@ -19,7 +18,8 @@ class Summary extends Component {
     success: null,
     selectTags: ['exclude'],
     shouldExcludeTags: true,
-    currentYear: 2019
+    currentYear: 2019,
+    mode: 'Rules',
   }
 
   sortCategories = (summary) => summary.slice().sort((x,y) => y.amount - x.amount)
@@ -36,6 +36,10 @@ class Summary extends Component {
     }
   };
 
+  updateMode = (data) => {
+    this.setState({ mode: data.value });
+  }
+
   toggleShouldExcludeTags = (data) => {
     if (data.target.id === 'exclude') {
       this.setState({ shouldExcludeTags: true});
@@ -43,6 +47,17 @@ class Summary extends Component {
       this.setState({ shouldExcludeTags: false});
     }
   };
+
+  renderAlerts(error, success) {
+    return (
+      <Row className='action-alerts'>
+        <Col xs={12} >
+          {error && <Alert variant="danger">{error}</Alert>}
+          {success && <Alert variant="success">{success}</Alert>}
+        </Col>
+      </Row>
+    );
+  }
 
   render() {
     const { accountId, summaryData, getSummaryData, currentMonth } = this.props;
@@ -54,122 +69,54 @@ class Summary extends Component {
         getSummaryData();
       }
 
-      const { error, success, selectTags, shouldExcludeTags } = this.state
+      const { currentYear, mode, error, success, selectTags, shouldExcludeTags } = this.state
 
       const updatedTransactions = helper.applyRules(transactions, categoryRules, tagRules, selectTags, shouldExcludeTags)
       const summary = helper.createSummary(updatedTransactions);
-      const total = summary.map(x => x.amount).reduce((acc,x) => acc + x, 0);
-      const monthOptions = values.months.map(x => { return { value:x, label:x }});
+      const sortedCategories = this.sortCategories(summary)
 
       return (
         <div className="summary-container">
 
           <Container>
 
-            <Row className='action-alerts'>
-              <Col xs={12} >
-                {error && <Alert variant="danger">{error}</Alert>}
-                {success && <Alert variant="success">{success}</Alert>}
-              </Col>
-            </Row>
+            { this.renderAlerts(error, success) }
 
-            <Row className='summary-controller'>
-              <Col xs={12} >
-                <ListGroup>
-                  <ListGroup.Item className='controller-section'>
-                    <Container>
+            <SummaryController
+              currentMonth={currentMonth}
+              selectTags={selectTags}
+              currentMode={mode}
+              tags={tags}
+              updateMode={this.updateMode}
+              updateMonth={this.updateMonth}
+              handleActiveTagChange={this.handleActiveTagChange}
+              toggleShouldExcludeTags={this.toggleShouldExcludeTags}
+            />
 
-                      <Row className='date-tag-select'>
-                        <Col xs={1} >
-                          <div>
-                            Date
-                          </div>
-                        </Col>
-                        <Col xs={3} >
-                            <Select
-                              className='active-date'
-                              label='some label'
-                              defaultValue={ monthOptions.find(x => x.value === currentMonth) }
-                              options={ monthOptions }
-                              onChange= { this.updateMonth }
-                            />
-                        </Col>
-                      </Row>
-
-                      <Row className='date-tag-select'>
-                        <Col xs={1} >
-                          <div>
-                            Tags
-                          </div>
-                        </Col>
-                        <Col xs={3} >
-                          <Select
-                            className="active-tags"
-                            isMulti
-                            tags
-                            value = { selectTags.map(x => { return { value: x, label: x } }) }
-                            options={ tags.map(x => {return {value: x, label: x}}) }
-                            onChange = {this.handleActiveTagChange }
-                          />
-                        </Col>
-
-                      </Row>
-
-                      <Row className='toggle-tags'>
-                        <Col xs={3} >
-                          <Form.Check
-                            defaultChecked
-                            type="radio"
-                            label='Exclude tags'
-                            name="excludeTags"
-                            id="exclude"
-                            onClick = { this.toggleShouldExcludeTags }
-                          />
-                        </Col>
-
-                        <Col xs={3} >
-                          <Form.Check
-                            type="radio"
-                            label='Only show tags'
-                            name="excludeTags"
-                            id="notExclude"
-                            onClick = { this.toggleShouldExcludeTags }
-                          />
-                        </Col>
-                      </Row>
-
-                    </Container>
-
-                  </ListGroup.Item>
-                </ListGroup>
-              </Col>
-            </Row>
-
-
+            {/* TODO: if budget mode render buget */}
             <Row>
               <Col xs={12} >
                 <ListGroup>
-                  { this.sortCategories(summary).map(category =>
-                    <CategorySection
-                      key={category.category}
-                      category={category}
-                      allCategories={ categories.map(x => { return {value: x, label: x}}) }
-                      allTags={ tags.map(x => {return {value: x, label: x}}) }
-                      setError={ this.setError }
-                      setSuccess={ this.setSuccess }
-                      accountId= { accountId }
-                      getSummaryData = { getSummaryData }
-                    />)
-                  }
 
-                  <ListGroup.Item className='total-section entire-total'>
-                    <Container>
-                      <Row>
-                        <Col xs={9}>Total</Col>
-                        <Col className='category-subtotal' >{ Math.round(total) }</Col>
-                      </Row>
-                    </Container>
-                  </ListGroup.Item>
+                  { mode === "Rules"
+                    ? <CategorySection
+                        categories={sortedCategories}
+                        allCategories={ categories.map(x => { return {value: x, label: x}}) }
+                        allTags={ tags.map(x => {return {value: x, label: x}}) }
+                        setError={ this.setError }
+                        setSuccess={ this.setSuccess }
+                        accountId= { accountId }
+                        getSummaryData = { getSummaryData }
+                      />
+                    : mode === "Budget"
+                      ? <BudgetSection
+                          categories={sortedCategories}
+                          month={currentMonth}
+                          year={currentYear}
+                        />
+                      : undefined
+                 }
+
                 </ListGroup>
 
               </Col>

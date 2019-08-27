@@ -97,6 +97,33 @@ def get_transactions(account_id, month):
 
     return result
 
+def get_budgets(account_id, month, year):
+    budgets = data.budgets(account_id, month, year)
+    if not budgets:
+        # using -1 to represent default
+        budgets = data.budgets(account_id, "-1", year)
+
+    return budgets
+
+def update_budgets(account_id, budget_update_request):
+    month = budget_update_request['month']
+    year = budget_update_request['year']
+    data.delete_budgets(account_id, month, year)
+
+    updated_budgets = [
+        {
+          'account_id': account_id,
+          'month': month,
+          'year': year,
+          'category': budget['categoryName'],
+          'budget': budget['budget']
+        }
+        for budget in budget_update_request['budgets']
+        if budget['budget'] > 0
+    ]
+    return data.create_budgets(updated_budgets)
+
+
 def handle_webhook(webhook):
     print(f"handling webhook: {webhook}")
     code = webhook['webhook_code']

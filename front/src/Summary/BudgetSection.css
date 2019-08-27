@@ -1,0 +1,17 @@
+
+.budget-total {
+  font-weight:bold;
+}
+
+.budget-update-button {
+  margin-left: 10px;
+}
+
+.cell-numbers {
+  text-align: right;
+  margin-right: 25px;
+}
+
+.input-cell-numbers {
+  text-align: right
+}
