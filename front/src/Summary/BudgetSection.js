@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Row, ButtonToolbar } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
-import './BudgetSection.css';
 import api from '../api';
-import values from '../values';
 import authHelper from '../authHelper';
+import values from '../values';
+import './BudgetSection.css';
 import CellNumber from './CellNumber';
 
 const defaultMonthIndex = -1;
@@ -50,6 +50,17 @@ const BudgetSection = (props) => {
     }
     const headers = {...{ 'Content-Type': 'application/json' }, ...authHelper.header()}
     api.fetchHelper(`/api/budgets`, {
+      headers,
+      method: 'POST',
+      body: JSON.stringify(request)
+     })
+      .then(_ => callback())
+  }
+
+  const clearBudget = (month, callback) => () => {
+    const request = {month,year}
+    const headers = {...{ 'Content-Type': 'application/json' }, ...authHelper.header()}
+    api.fetchHelper(`/api/budgets/clear`, {
       headers,
       method: 'POST',
       body: JSON.stringify(request)
@@ -141,12 +152,22 @@ const BudgetSection = (props) => {
       <Container>
 
       <Row className="float-right">
-        <Button className='budget-update-button' onClick={updateBudget(monthNumber, fetchBudget)}>
+        <Button variant={'success'} className='budget-update-button' onClick={updateBudget(monthNumber, fetchBudget)}>
           Update Month
         </Button>
+
         <Button
           className='budget-update-button'
-          variant={'success'}
+          variant={'secondary'}
+          onClick={clearBudget(monthNumber, fetchBudget)}
+        >
+          Use Default
+        </Button>
+
+
+        <Button
+          className='budget-update-button'
+          variant={'primary'}
           onClick={updateBudget(defaultMonthIndex, () => alert('default settings have been saved'))}
         >
           Save as Default
