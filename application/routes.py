@@ -133,6 +133,15 @@ def create_budgets():
         return jsonify({'result': {'updated_count': updated}})
     return abort(400)
 
+@app.route('/api/budgets/clear', methods=['POST'])
+def clear_budgets():
+    account_id = helper.validate_request(request)
+    clear_request = request.json
+    if account_id:
+        updated = data.delete_budgets(account_id, clear_request['month'], clear_request['year'])
+        return jsonify({'result': {'updated_count': updated}})
+    return abort(400)
+
 @app.route('/api/plaid_accounts', methods=['GET'])
 def plaid_accounts():
     account_id = helper.validate_request(request)
