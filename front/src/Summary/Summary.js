@@ -74,7 +74,7 @@ class Summary extends Component {
 
       const { currentYear, mode, error, success, selectTags, selectAccounts, shouldExcludeTags } = this.state
 
-      const selectTransactions = selectAccounts ? transactions.filter(t => selectAccounts.includes(t.account_id)): transactions;
+      const selectTransactions = selectAccounts ? transactions.filter(t => selectAccounts.includes(t.account_id.slice(0,10))): transactions;
       const updatedTransactions = helper.applyRules(selectTransactions, categoryRules, tagRules, selectTags, shouldExcludeTags)
       const summary = helper.createSummary(updatedTransactions);
       const sortedCategories = this.sortCategories(summary)

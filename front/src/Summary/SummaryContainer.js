@@ -46,7 +46,7 @@ class SummaryContainer extends Component {
           alert(transactions.error);
         }
 
-        const accounts = [...new Set(transactions.result.map(x => x.account_id))];
+        const accounts = [...new Set(transactions.result.map(x => x.account_id.slice(0,10)))];
 
         this.setState({
           transactions: transactions.result,
