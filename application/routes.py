@@ -1,10 +1,7 @@
-import os
-
 from flask import jsonify, request, redirect, session, abort, render_template
 
 from application import app
 from application import data
-from application import plaid
 from application import helper
 from application import google_auth
 from application import manager

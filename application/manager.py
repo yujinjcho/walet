@@ -1,13 +1,12 @@
-import jwt
 import json
 
-from application import app
 from application import google_auth
 from application import data
 from application import helper
 from application import plaid
 
 from plaid.errors import APIError
+
 
 def handle_auth_callback(request, session):
     access_token, refresh_token = google_auth.handle_auth_callback(request, session)
