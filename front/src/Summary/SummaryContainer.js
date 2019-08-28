@@ -12,6 +12,7 @@ class SummaryContainer extends Component {
     tagRules: undefined,
     tags: undefined,
     categories: undefined,
+    accounts: undefined,
     currentMonth: values.months[new Date().getMonth()],
   };
 
@@ -45,12 +46,15 @@ class SummaryContainer extends Component {
           alert(transactions.error);
         }
 
+        const accounts = [...new Set(transactions.result.map(x => x.account_id))];
+
         this.setState({
           transactions: transactions.result,
           categoryRules: categoryRules.result,
           tagRules: tagRules.result,
           tags: tags.result.slice().sort(),
           categories: categories.result.slice().sort(),
+          accounts: accounts,
         });
       })
       .catch( e => {
@@ -72,13 +76,16 @@ class SummaryContainer extends Component {
       }
       : undefined
 
+    const { accounts, currentMonth } = this.state;
+
     return (
       <Summary
         accountId={ accountId }
         summaryData={ summaryData }
         getSummaryData={ this.getSummaryData }
         updateMonth = { this.updateMonth }
-        currentMonth = { this.state.currentMonth }
+        currentMonth = { currentMonth }
+        accounts = { accounts }
       />
     );
   }

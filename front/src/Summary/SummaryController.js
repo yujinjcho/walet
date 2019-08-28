@@ -16,16 +16,19 @@ const SummaryController = (props) => {
     currentMonth,
     currentMode,
     selectTags,
+    accounts,
+    selectAccounts,
     tags,
     handleActiveTagChange,
+    handleAccountChange,
     toggleShouldExcludeTags,
     updateMode,
     updateMonth
   } = props;
   const modeOptions = convertToOptions(values.modes);
+  const accountOptions = convertToOptions(accounts);
   const monthOptions = convertToOptions(values.months);
   const tagOptions = convertToOptions(tags);
-  const selectedTagOptions = convertToOptions(selectTags);
 
   return (
       <Row className='summary-controller'>
@@ -42,6 +45,15 @@ const SummaryController = (props) => {
                 />
 
                 <ControllerSelect
+                  label='Accounts'
+                  isMulti
+                  tags
+                  value = { convertToOptions(selectAccounts) }
+                  options={ accountOptions }
+                  onChange = {handleAccountChange }
+                />
+
+                <ControllerSelect
                   label='Date'
                   defaultValue={ monthOptions.find(x => x.value === currentMonth) }
                   options={ monthOptions }
@@ -52,7 +64,7 @@ const SummaryController = (props) => {
                   label='Tags'
                   isMulti
                   tags
-                  value = { selectedTagOptions }
+                  value = { convertToOptions(selectTags) }
                   options={ tagOptions }
                   onChange = {handleActiveTagChange }
                 />

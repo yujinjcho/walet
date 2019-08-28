@@ -17,6 +17,7 @@ class Summary extends Component {
     error: null,
     success: null,
     selectTags: ['exclude'],
+    selectAccounts: undefined,
     shouldExcludeTags: true,
     currentYear: 2019,
     mode: 'Rules',
@@ -29,6 +30,8 @@ class Summary extends Component {
   setSuccess = (success) => this.setState({ success: success });
 
   handleActiveTagChange = (data) => this.setState({ selectTags: data.map(x => x.value ) });
+
+  handleAccountChange = (data) => this.setState({ selectAccounts: data.map(x => x.value ) });
 
   updateMonth = (data, action) => {
     if (data.value !== this.props.currentMonth) {
@@ -60,7 +63,7 @@ class Summary extends Component {
   }
 
   render() {
-    const { accountId, summaryData, getSummaryData, currentMonth } = this.props;
+    const { accountId, summaryData, getSummaryData, accounts, currentMonth } = this.props;
 
     if (summaryData) {
       const { tags, categories, tagRules, categoryRules, transactions } = summaryData;
@@ -69,9 +72,10 @@ class Summary extends Component {
         getSummaryData();
       }
 
-      const { currentYear, mode, error, success, selectTags, shouldExcludeTags } = this.state
+      const { currentYear, mode, error, success, selectTags, selectAccounts, shouldExcludeTags } = this.state
 
-      const updatedTransactions = helper.applyRules(transactions, categoryRules, tagRules, selectTags, shouldExcludeTags)
+      const selectTransactions = selectAccounts ? transactions.filter(t => selectAccounts.includes(t.account_id)): transactions;
+      const updatedTransactions = helper.applyRules(selectTransactions, categoryRules, tagRules, selectTags, shouldExcludeTags)
       const summary = helper.createSummary(updatedTransactions);
       const sortedCategories = this.sortCategories(summary)
 
@@ -85,11 +89,14 @@ class Summary extends Component {
             <SummaryController
               currentMonth={currentMonth}
               selectTags={selectTags}
+              accounts={accounts}
+              selectAccounts={selectAccounts || accounts}
               currentMode={mode}
               tags={tags}
               updateMode={this.updateMode}
               updateMonth={this.updateMonth}
               handleActiveTagChange={this.handleActiveTagChange}
+              handleAccountChange={this.handleAccountChange}
               toggleShouldExcludeTags={this.toggleShouldExcludeTags}
             />
 
