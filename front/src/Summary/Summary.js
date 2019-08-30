@@ -10,6 +10,7 @@ import './Summary.css';
 import SummaryController from './SummaryController';
 import './TotalSection.css';
 import BudgetSection from './BudgetSection';
+import ChartSection from './ChartSection';
 
 
 class Summary extends Component {
@@ -121,7 +122,8 @@ class Summary extends Component {
                           month={currentMonth}
                           year={currentYear}
                         />
-                      : undefined
+                      : mode === "Chart"
+                        ? <ChartSection />
                  }
 
                 </ListGroup>
