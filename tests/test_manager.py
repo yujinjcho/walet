@@ -59,3 +59,46 @@ def test_update_budgets():
     }
     updated = manager.update_budgets('123', budget_request)
     assert updated == 2
+
+def test_handle_webhook():
+    manager.data_layer = SimpleNamespace()
+    manager.plaid = SimpleNamespace()
+
+    def access_token_by_item_id(item_id):
+        assert item_id == '123'
+        return [('token_id', 'account_id')]
+    manager.data_layer.access_token_by_item_id = access_token_by_item_id
+
+    def recent_transactions(item_id, access_token):
+        assert item_id == '123'
+        assert access_token == 'token_id'
+        return [{'transaction_id': '2', 'date': '2019-09-10', 'category': ['Grocery']}]
+    manager.plaid.recent_transactions = recent_transactions
+
+    def update_plaid_categories(categories, account_id):
+        assert categories == ['Grocery']
+        assert account_id == 'account_id'
+    manager.data_layer.update_plaid_categories = update_plaid_categories
+
+    def update_transactions(db_transactions):
+        assert len(db_transactions) == 1
+        assert db_transactions[0][0] == '2'
+    manager.data_layer.update_transactions = update_transactions
+
+    webhook = {
+        'webhook_code': 'DEFAULT_UPDATE',
+        'item_id': '123'
+    }
+    manager.handle_webhook(webhook)
+
+    def delete_transactions(item_id, transactions):
+        assert item_id == '123'
+        assert transactions == ['t1']
+
+    manager.data_layer.delete_transactions = delete_transactions
+    webhook = {
+        'webhook_code': 'TRANSACTIONS_REMOVED',
+        'removed_transactions': ['t1'],
+        'item_id': '123'
+    }
+    manager.handle_webhook(webhook)
