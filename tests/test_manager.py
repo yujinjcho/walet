@@ -8,12 +8,12 @@ from application import manager
 
 def test_get_budgets():
 
-    manager.data_layer = SimpleNamespace()
+    manager.data = SimpleNamespace()
 
     # month has budget
     def mock_budgets(account_id, month, year):
         return [('Grocery', 300), ('Travel', 150)]
-    manager.data_layer.budgets = mock_budgets
+    manager.data.budgets = mock_budgets
 
     budgets = manager.get_budgets('123', '4', '2019')
     assert len(budgets) == 2
@@ -23,20 +23,20 @@ def test_get_budgets():
         if month != '-1':
             return []
         return [('Grocery', 300)]
-    manager.data_layer.budgets = mock_budgets
+    manager.data.budgets = mock_budgets
     budgets = manager.get_budgets('123', '4', '2019')
     assert len(budgets) == 1
     assert budgets[0][0] == 'Grocery'
 
 def test_update_budgets():
-    manager.data_layer = SimpleNamespace()
+    manager.data = SimpleNamespace()
 
     def delete_budgets(account_id, month, year):
         assert account_id == '123'
         assert month == '4'
         assert year == '2019'
 
-    manager.data_layer.delete_budgets = delete_budgets
+    manager.data.delete_budgets = delete_budgets
 
     def create_budgets(updated_budgets):
         assert len(updated_budgets) == 2
@@ -46,7 +46,7 @@ def test_update_budgets():
         assert updated_budgets[1]['budget'] == 50
         return 2
 
-    manager.data_layer.create_budgets = create_budgets
+    manager.data.create_budgets = create_budgets
 
     budget_request = {
        'month': '4',
@@ -61,13 +61,13 @@ def test_update_budgets():
     assert updated == 2
 
 def test_handle_webhook():
-    manager.data_layer = SimpleNamespace()
+    manager.data = SimpleNamespace()
     manager.plaid = SimpleNamespace()
 
     def access_token_by_item_id(item_id):
         assert item_id == '123'
         return [('token_id', 'account_id')]
-    manager.data_layer.access_token_by_item_id = access_token_by_item_id
+    manager.data.access_token_by_item_id = access_token_by_item_id
 
     def recent_transactions(item_id, access_token):
         assert item_id == '123'
@@ -78,12 +78,12 @@ def test_handle_webhook():
     def update_plaid_categories(categories, account_id):
         assert categories == ['Grocery']
         assert account_id == 'account_id'
-    manager.data_layer.update_plaid_categories = update_plaid_categories
+    manager.data.update_plaid_categories = update_plaid_categories
 
     def update_transactions(db_transactions):
         assert len(db_transactions) == 1
         assert db_transactions[0][0] == '2'
-    manager.data_layer.update_transactions = update_transactions
+    manager.data.update_transactions = update_transactions
 
     webhook = {
         'webhook_code': 'DEFAULT_UPDATE',
@@ -95,7 +95,7 @@ def test_handle_webhook():
         assert item_id == '123'
         assert transactions == ['t1']
 
-    manager.data_layer.delete_transactions = delete_transactions
+    manager.data.delete_transactions = delete_transactions
     webhook = {
         'webhook_code': 'TRANSACTIONS_REMOVED',
         'removed_transactions': ['t1'],
