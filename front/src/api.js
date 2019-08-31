@@ -1,4 +1,3 @@
-import values from './values';
 import authHelper from './authHelper';
 
 const baseUrl = process.env.REACT_APP_SERVICES_BASE_URL || '';
