@@ -13,7 +13,7 @@ def extract_categories(transactions):
 
     categories = [
         transaction['category'][0]
-        for transaction in transactions if len(transaction['category']) > 0
+        for transaction in transactions if transaction['category'] and len(transaction['category']) > 0
     ]
     return list(set(categories))
 
@@ -25,6 +25,7 @@ def decrypt(s):
 
 def start_end_of_month(month, year):
     month = int(month)
+    year = int(year)
     start_day, num_of_days = calendar.monthrange(year, month)
     start_date = datetime(year, month, 1).strftime(date_pattern)
     end_date = datetime(year, month, num_of_days).strftime(date_pattern)

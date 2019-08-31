@@ -118,7 +118,7 @@ class EditCategory extends Component {
                   id="formHorizontalRadios3"
                   onClick={ this.setCategoryRule }
                 />
-                <b>{ transaction.category.join( ' > ') }</b>
+                <b>{ transaction.category ? transaction.category.join( ' > ') : 'N/A' }</b>
               </div>
 
             </Modal.Body>

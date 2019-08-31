@@ -20,7 +20,6 @@ class Summary extends Component {
     selectTags: ['exclude'],
     selectAccounts: undefined,
     shouldExcludeTags: true,
-    currentYear: 2019,
     mode: 'Rules',
   }
 
@@ -37,6 +36,12 @@ class Summary extends Component {
   updateMonth = (data, action) => {
     if (data.value !== this.props.currentMonth) {
       this.props.updateMonth(data.value)
+    }
+  };
+
+  updateYear = (data, action) => {
+    if (data.value !== this.props.currentYear) {
+      this.props.updateYear(data.value)
     }
   };
 
@@ -64,7 +69,7 @@ class Summary extends Component {
   }
 
   render() {
-    const { accountId, summaryData, getSummaryData, accounts, currentMonth } = this.props;
+    const { accountId, summaryData, getSummaryData, accounts, currentMonth, currentYear } = this.props;
 
     if (summaryData) {
       const { tags, categories, tagRules, categoryRules, transactions } = summaryData;
@@ -73,7 +78,7 @@ class Summary extends Component {
         getSummaryData();
       }
 
-      const { currentYear, mode, error, success, selectTags, selectAccounts, shouldExcludeTags } = this.state
+      const { mode, error, success, selectTags, selectAccounts, shouldExcludeTags } = this.state
 
       const selectTransactions = selectAccounts ? transactions.filter(t => selectAccounts.includes(t.account_id.slice(0,10))): transactions;
       const updatedTransactions = helper.applyRules(selectTransactions, categoryRules, tagRules, selectTags, shouldExcludeTags)
@@ -89,6 +94,7 @@ class Summary extends Component {
 
             <SummaryController
               currentMonth={currentMonth}
+              currentYear={currentYear}
               selectTags={selectTags}
               accounts={accounts}
               selectAccounts={selectAccounts || accounts}
@@ -96,6 +102,7 @@ class Summary extends Component {
               tags={tags}
               updateMode={this.updateMode}
               updateMonth={this.updateMonth}
+              updateYear={this.updateYear}
               handleActiveTagChange={this.handleActiveTagChange}
               handleAccountChange={this.handleAccountChange}
               toggleShouldExcludeTags={this.toggleShouldExcludeTags}
@@ -124,6 +131,7 @@ class Summary extends Component {
                         />
                       : mode === "Chart"
                         ? <ChartSection />
+                        : undefined
                  }
 
                 </ListGroup>

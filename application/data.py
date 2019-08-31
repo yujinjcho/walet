@@ -229,6 +229,17 @@ def get_transactions(account_id, item_id, month):
     """
     return _select(query, (account_id, item_id, month))
 
+def get_annual_transactions(account_id, item_id, year):
+    query = """
+        SELECT data
+        FROM plaid_transactions
+        WHERE
+          account_id = %s
+          AND item_id = %s
+          AND DATE_PART('year', transaction_date) = %s
+    """
+    return _select(query, (account_id, item_id, year))
+
 def update_transactions(transactions):
     query = """
       INSERT INTO plaid_transactions (transaction_id, account_id, data, transaction_date, item_id)

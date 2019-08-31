@@ -6,6 +6,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Row from 'react-bootstrap/Row';
 import values from '../values';
 import ControllerSelect from './ControllerSelect';
+import Select from 'react-select';
 
 import './SummaryController.css';
 
@@ -14,6 +15,7 @@ const convertToOptions = (input) => input.map(x => { return { value:x, label:x }
 const SummaryController = (props) => {
   const {
     currentMonth,
+    currentYear,
     currentMode,
     selectTags,
     accounts,
@@ -23,12 +25,14 @@ const SummaryController = (props) => {
     handleAccountChange,
     toggleShouldExcludeTags,
     updateMode,
-    updateMonth
+    updateMonth,
+    updateYear,
   } = props;
   const modeOptions = convertToOptions(values.modes);
   const accountOptions = convertToOptions(accounts);
   const monthOptions = convertToOptions(values.months);
   const tagOptions = convertToOptions(tags);
+  const yearOptions = convertToOptions(values.years);
 
   return (
       <Row className='summary-controller'>
@@ -44,6 +48,29 @@ const SummaryController = (props) => {
                   onChange={ updateMode }
                 />
 
+                {/* update years */}
+                <Row className='controller-select-row'>
+                  <Col xs={1} >
+                    <div>
+                      {'Date'}
+                    </div>
+                  </Col>
+                  <Col xs={3} >
+                      <Select
+                        options={ monthOptions }
+                        defaultValue={ monthOptions.find(x => x.value === currentMonth) }
+                        onChange= { updateMonth }
+                      />
+                  </Col>
+                  <Col xs={2} >
+                      <Select
+                        defaultValue={ yearOptions.find(y => y.value === currentYear.toString()) }
+                        options={ yearOptions }
+                        onChange= { updateYear }
+                      />
+                  </Col>
+                </Row>
+
                 <ControllerSelect
                   label='Accounts'
                   isMulti
@@ -51,13 +78,6 @@ const SummaryController = (props) => {
                   value = { convertToOptions(selectAccounts) }
                   options={ accountOptions }
                   onChange = {handleAccountChange }
-                />
-
-                <ControllerSelect
-                  label='Date'
-                  defaultValue={ monthOptions.find(x => x.value === currentMonth) }
-                  options={ monthOptions }
-                  onChange= { updateMonth }
                 />
 
                 <ControllerSelect

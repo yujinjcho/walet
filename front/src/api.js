@@ -5,10 +5,8 @@ const baseUrl = process.env.REACT_APP_SERVICES_BASE_URL || '';
 
 const fetchHelper = (url, options = {}) => fetch(baseUrl + url, options);
 
-const loadTransactions = (accountId, monthName) => {
-  const month = values.months.indexOf(monthName) + 1;
-
-  return fetchHelper(`/api/transactions?month=${month}`, { headers: authHelper.header() })
+const loadTransactions = (year) => {
+  return fetchHelper(`/api/v2/transactions?year=${year}`, { headers: authHelper.header() })
     .then(res => res.json())
     .catch(e => {
       console.warn("loadTransaction failed: ")

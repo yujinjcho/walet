@@ -121,7 +121,7 @@ const selectCategory = (transaction, transactionIdLookup, nameLookup, nameContai
     return categoryIdLookup[transaction.category_id];
   }
 
-  return transaction.category.length > 0 ? transaction.category[0] : 'N/A';
+ return (transaction.category && transaction.category.length > 0) ? transaction.category[0] : 'N/A';
 };
 
 export default {

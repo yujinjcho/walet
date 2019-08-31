@@ -14,20 +14,32 @@ class SummaryContainer extends Component {
     categories: undefined,
     accounts: undefined,
     currentMonth: values.months[new Date().getMonth()],
+    currentYear: new Date().getFullYear(),
   };
 
-  updateMonth = (month) => {
-    this.setState({currentMonth: month}, () => this.getSummaryData(month));
+  updateMonth = (month) => this.setState({currentMonth: month});
+
+  updateYear = (year) => this.setState({currentYear: year}, () => this.updateTransactions());
+
+  updateTransactions() {
+    const { currentYear } = this.state;
+    api.loadTransactions(currentYear)
+      .then(res => {
+        if (res.error) {
+          alert(res.error);
+        }
+        this.setState({transactions: res.result});
+      })
   }
 
   componentDidMount() {
-    this.getSummaryData()
+    this.getSummaryData();
+    this.updateTransactions();
   };
 
   getSummaryData = () => {
     const { accountId } = this.props;
     return Promise.all([
-      api.loadTransactions(accountId, this.state.currentMonth),
       api.loadCategoryRules(accountId),
       api.loadTagRules(accountId),
       api.loadTags(accountId),
@@ -35,21 +47,18 @@ class SummaryContainer extends Component {
     ])
       .then( res => {
         const [
-          transactions,
           categoryRules,
           tagRules,
           tags,
           categories,
         ] = res;
 
-        if (transactions.error) {
-          alert(transactions.error);
-        }
-
-        const accounts = [...new Set(transactions.result.map(x => x.account_id.slice(0,10)))];
+        const { transactions } = this.state;
+        const accounts = transactions
+          ? [...new Set(transactions.map(x => x.account_id.slice(0,10)))]
+          : [];
 
         this.setState({
-          transactions: transactions.result,
           categoryRules: categoryRules.result,
           tagRules: tagRules.result,
           tags: tags.result.slice().sort(),
@@ -63,12 +72,17 @@ class SummaryContainer extends Component {
       })
   };
 
+  filterCurrentMonth(transactions) {
+    const { currentMonth } = this.state
+    return transactions.filter(t => new Date(t.date).getMonth() === values.months.indexOf(currentMonth));
+  }
+
   render() {
     const { accountId } = this.props;
     const {transactions, tags, categories, tagRules, categoryRules} = this.state;
     const summaryData = transactions && tags && categories && tagRules && categoryRules
       ? {
-        transactions: transactions,
+        transactions: this.filterCurrentMonth(transactions),
         tags: tags,
         categories: categories,
         tagRules: tagRules,
@@ -76,7 +90,7 @@ class SummaryContainer extends Component {
       }
       : undefined
 
-    const { accounts, currentMonth } = this.state;
+    const { accounts, currentMonth, currentYear } = this.state;
 
     return (
       <Summary
@@ -84,7 +98,9 @@ class SummaryContainer extends Component {
         summaryData={ summaryData }
         getSummaryData={ this.getSummaryData }
         updateMonth = { this.updateMonth }
+        updateYear = { this.updateYear }
         currentMonth = { currentMonth }
+        currentYear = { currentYear }
         accounts = { accounts }
       />
     );

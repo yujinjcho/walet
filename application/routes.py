@@ -103,6 +103,17 @@ def transactions():
 
     return abort(400)
 
+@app.route('/api/v2/transactions', methods=['GET'])
+def annual_transactions():
+    year = request.args.get('year')
+    account_id = helper.validate_request(request)
+
+    if account_id:
+        transaction_result = manager.get_annual_transactions(account_id, year)
+        return jsonify(transaction_result)
+
+    return abort(400)
+
 @app.route('/api/budgets', methods=['GET'])
 def budgets():
     month = request.args.get('month')
