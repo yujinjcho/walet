@@ -70,14 +70,7 @@ def get_transactions(account_id, month):
         else:
             try:
                 item_transactions = plaid.transactions(account_id, month, token)
-
-                db_transactions = [
-                    (x['transaction_id'], account_id, json.dumps(x), x['date'], item_id)
-                    for x in item_transactions
-                ]
-                print(f"persisting {len(item_transactions)} transactions for month: {month}, item_id: {item_id}")
-                data.update_transactions(db_transactions)
-                data.update_plaid_categories(helper.extract_categories(item_transactions), account_id)
+                update_transactions(account_id, item_id, item_transactions)
 
             except APIError as e:
                 print('plaid error e: {}'.format(e))
@@ -173,14 +166,15 @@ def handle_webhook(webhook):
         tokens = data.access_token_by_item_id(item_id)
         if tokens:
             access_token, account_id = tokens[0]
-            transactions = plaid.recent_transactions(item_id, access_token)
-            db_transactions = [
-                (x['transaction_id'], account_id, json.dumps(x), x['date'], item_id )
-                for x in transactions
-            ]
-            data.update_plaid_categories(helper.extract_categories(transactions), account_id)
-            result = data.update_transactions(db_transactions)
-            print(f"updated rows: {result}")
+            transactions = plaid.recent_transactions(access_token)
+            update_transactions(account_id, item_id, transactions)
+
+    elif code == "HISTORICAL_UPDATE":
+        tokens = data.access_token_by_item_id(item_id)
+        if tokens:
+            access_token, account_id = tokens[0]
+            transactions = plaid.recent_transactions(access_token, 'year')
+            update_transactions(account_id, item_id, transactions)
 
     elif code == "TRANSACTIONS_REMOVED":
         result = data.delete_transactions(item_id, webhook['removed_transactions'])
@@ -190,4 +184,13 @@ def handle_webhook(webhook):
 
     return "success"
 
+
+def update_transactions(account_id, item_id, transactions):
+    db_transactions = [
+        (x['transaction_id'], account_id, json.dumps(x), x['date'], item_id)
+        for x in transactions
+    ]
+    data.update_plaid_categories(helper.extract_categories(transactions), account_id)
+    result = data.update_transactions(db_transactions)
+    print(f"updated rows: {result}")
 

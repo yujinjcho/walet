@@ -69,8 +69,7 @@ def test_handle_webhook():
         return [('token_id', 'account_id')]
     manager.data.access_token_by_item_id = access_token_by_item_id
 
-    def recent_transactions(item_id, access_token):
-        assert item_id == '123'
+    def recent_transactions(access_token, range_type='month'):
         assert access_token == 'token_id'
         return [{'transaction_id': '2', 'date': '2019-09-10', 'category': ['Grocery']}]
     manager.plaid.recent_transactions = recent_transactions

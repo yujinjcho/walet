@@ -31,9 +31,15 @@ def start_end_of_month(month, year):
     end_date = datetime(year, month, num_of_days).strftime(date_pattern)
     return start_date, end_date
 
-def recent_range():
+def recent_range(range_type):
     end = datetime.now()
-    start = end - timedelta(days=30)
+    if range_type == 'month':
+        delta = 30
+    elif range_type == 'year':
+        delta = 360
+    else:
+        raise Exception(f'invalid range_type of {range_type}')
+    start = end - timedelta(days=delta)
     return start.strftime(date_pattern), end.strftime(date_pattern)
 
 
