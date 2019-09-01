@@ -71,7 +71,7 @@ class Summary extends Component {
 
   filterCurrentMonth(transactions) {
     const { currentMonth } = this.props;
-    return transactions.filter(t => new Date(t.date).getMonth() === values.months.indexOf(currentMonth));
+    return transactions.filter(t => helper.stringToDate(t.date).getMonth() === values.months.indexOf(currentMonth));
   }
 
   render() {

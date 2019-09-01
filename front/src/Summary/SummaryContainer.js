@@ -4,6 +4,7 @@ import api from '../api';
 import values from '../values';
 
 import withLogin from '../withLogin';
+import helper from '../helper';
 
 class SummaryContainer extends Component {
   state = {
@@ -72,7 +73,7 @@ class SummaryContainer extends Component {
 
   filterCurrentMonth(transactions) {
     const { currentMonth } = this.state
-    return transactions.filter(t => new Date(t.date).getMonth() === values.months.indexOf(currentMonth));
+    return transactions.filter(t => helper.stringToDate(t.date).getMonth() === values.months.indexOf(currentMonth));
   }
 
   render() {

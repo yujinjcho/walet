@@ -123,8 +123,15 @@ const selectCategory = (transaction, transactionIdLookup, nameLookup, nameContai
  return (transaction.category && transaction.category.length > 0) ? transaction.category[0] : 'N/A';
 };
 
+// for transaction dates in 'YYYY-MM-DD' format
+const stringToDate = (date) => {
+  const [year, month, day] = date.split('-');
+  return new Date(year, parseInt(month) - 1, day);
+};
+
 export default {
   createSummary,
   applyRules,
-  groupTransactions
+  groupTransactions,
+  stringToDate
 };
