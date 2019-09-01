@@ -10,6 +10,8 @@ import './Summary.css';
 import SummaryController from './SummaryController';
 import './TotalSection.css';
 import BudgetSection from './BudgetSection';
+import ChartSection from './ChartSection';
+import values from '../values';
 
 
 class Summary extends Component {
@@ -17,8 +19,8 @@ class Summary extends Component {
     error: null,
     success: null,
     selectTags: ['exclude'],
+    selectAccounts: undefined,
     shouldExcludeTags: true,
-    currentYear: 2019,
     mode: 'Rules',
   }
 
@@ -30,9 +32,17 @@ class Summary extends Component {
 
   handleActiveTagChange = (data) => this.setState({ selectTags: data.map(x => x.value ) });
 
+  handleAccountChange = (data) => this.setState({ selectAccounts: data.map(x => x.value ) });
+
   updateMonth = (data, action) => {
     if (data.value !== this.props.currentMonth) {
       this.props.updateMonth(data.value)
+    }
+  };
+
+  updateYear = (data, action) => {
+    if (data.value !== this.props.currentYear) {
+      this.props.updateYear(data.value)
     }
   };
 
@@ -59,8 +69,13 @@ class Summary extends Component {
     );
   }
 
+  filterCurrentMonth(transactions) {
+    const { currentMonth } = this.props;
+    return transactions.filter(t => new Date(t.date).getMonth() === values.months.indexOf(currentMonth));
+  }
+
   render() {
-    const { accountId, summaryData, getSummaryData, currentMonth } = this.props;
+    const { accountId, summaryData, getSummaryData, accounts, currentMonth, currentYear } = this.props;
 
     if (summaryData) {
       const { tags, categories, tagRules, categoryRules, transactions } = summaryData;
@@ -69,10 +84,11 @@ class Summary extends Component {
         getSummaryData();
       }
 
-      const { currentYear, mode, error, success, selectTags, shouldExcludeTags } = this.state
+      const { mode, error, success, selectTags, selectAccounts, shouldExcludeTags } = this.state
 
-      const updatedTransactions = helper.applyRules(transactions, categoryRules, tagRules, selectTags, shouldExcludeTags)
-      const summary = helper.createSummary(updatedTransactions);
+      const selectTransactions = selectAccounts ? transactions.filter(t => selectAccounts.includes(t.account_id.slice(0,10))): transactions;
+      const updatedTransactions = helper.applyRules(selectTransactions, categoryRules, tagRules, selectTags, shouldExcludeTags).filter(t => t.show);
+      const summary = helper.createSummary(this.filterCurrentMonth(updatedTransactions));
       const sortedCategories = this.sortCategories(summary)
 
       return (
@@ -84,12 +100,17 @@ class Summary extends Component {
 
             <SummaryController
               currentMonth={currentMonth}
+              currentYear={currentYear}
               selectTags={selectTags}
+              accounts={accounts}
+              selectAccounts={selectAccounts || accounts}
               currentMode={mode}
               tags={tags}
               updateMode={this.updateMode}
               updateMonth={this.updateMonth}
+              updateYear={this.updateYear}
               handleActiveTagChange={this.handleActiveTagChange}
+              handleAccountChange={this.handleAccountChange}
               toggleShouldExcludeTags={this.toggleShouldExcludeTags}
             />
 
@@ -114,7 +135,9 @@ class Summary extends Component {
                           month={currentMonth}
                           year={currentYear}
                         />
-                      : undefined
+                      : mode === "Chart"
+                        ? <ChartSection transactions={updatedTransactions} currentYear={currentYear} />
+                        : undefined
                  }
 
                 </ListGroup>

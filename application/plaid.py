@@ -21,6 +21,15 @@ def transactions(account_id, month, token):
     response = client.Transactions.get(access_token, start_date=start, end_date=end)
     return response['transactions']
 
+def annual_transactions(year, token):
+    start, _ = helper.start_end_of_month('1', year)
+    _, end = helper.start_end_of_month('12', year)
+    access_token = helper.decrypt(token)
+    print(f'retrieving transactions from {start} to {end}')
+    response = client.Transactions.get(access_token, start_date=start, end_date=end)
+    return response['transactions']
+
+
 def recent_transactions(item_id, token):
     start, end = helper.recent_range()
     access_token = helper.decrypt(token)

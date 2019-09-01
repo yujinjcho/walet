@@ -1,10 +1,7 @@
-import os
-
 from flask import jsonify, request, redirect, session, abort, render_template
 
 from application import app
 from application import data
-from application import plaid
 from application import helper
 from application import google_auth
 from application import manager
@@ -102,6 +99,17 @@ def transactions():
 
     if account_id:
         transaction_result = manager.get_transactions(account_id, month)
+        return jsonify(transaction_result)
+
+    return abort(400)
+
+@app.route('/api/v2/transactions', methods=['GET'])
+def annual_transactions():
+    year = request.args.get('year')
+    account_id = helper.validate_request(request)
+
+    if account_id:
+        transaction_result = manager.get_annual_transactions(account_id, year)
         return jsonify(transaction_result)
 
     return abort(400)
