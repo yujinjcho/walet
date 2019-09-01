@@ -8,7 +8,6 @@ const applyRules = (transactions, categoryRules, tagRules, tags, shouldExcludeTa
 
 const createSummary = (transactions) => {
   const summary = transactions
-    .filter(t => t.show)
     .reduce(
       (acc,x) => {
         if (acc.hasOwnProperty(x.assignedCategory)) {

@@ -28,7 +28,11 @@ class SummaryContainer extends Component {
         if (res.error) {
           alert(res.error);
         }
-        this.setState({transactions: res.result});
+        const transactions = res.result;
+        const accounts = transactions
+          ? [...new Set(transactions.map(x => x.account_id.slice(0,10)))]
+          : [];
+        this.setState({transactions: transactions, accounts: accounts});
       })
   }
 
@@ -53,17 +57,11 @@ class SummaryContainer extends Component {
           categories,
         ] = res;
 
-        const { transactions } = this.state;
-        const accounts = transactions
-          ? [...new Set(transactions.map(x => x.account_id.slice(0,10)))]
-          : [];
-
         this.setState({
           categoryRules: categoryRules.result,
           tagRules: tagRules.result,
           tags: tags.result.slice().sort(),
           categories: categories.result.slice().sort(),
-          accounts: accounts,
         });
       })
       .catch( e => {
@@ -82,7 +80,7 @@ class SummaryContainer extends Component {
     const {transactions, tags, categories, tagRules, categoryRules} = this.state;
     const summaryData = transactions && tags && categories && tagRules && categoryRules
       ? {
-        transactions: this.filterCurrentMonth(transactions),
+        transactions: transactions,
         tags: tags,
         categories: categories,
         tagRules: tagRules,
