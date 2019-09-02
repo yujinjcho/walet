@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import SpendingGraph from './SpendingGraph';
+import React from 'react';
 import values from '../values';
+import SpendingGraph from './SpendingGraph';
 
 const groupTransactions = (transactions) => {
   return transactions.reduce((acc, x) => {
