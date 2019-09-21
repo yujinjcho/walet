@@ -9,7 +9,7 @@ import 'chartjs-plugin-colorschemes';
 const getPassedMonths = (selectedYear) => {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
-  return currentYear === parseInt(selectedYear) ? values.months.slice(0, currentMonth) : values.months;
+  return currentYear === parseInt(selectedYear) ? values.months.slice(0, currentMonth + 1) : values.months;
 }
 
 export default class SpendingGraph extends Component {

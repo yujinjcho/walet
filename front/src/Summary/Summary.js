@@ -114,7 +114,7 @@ class Summary extends Component {
               toggleShouldExcludeTags={this.toggleShouldExcludeTags}
             />
 
-            {/* TODO: if budget mode render buget */}
+            {/* TODO: PILL OR TABS FOR MODE */}
             <Row>
               <Col xs={12} >
                 <ListGroup>
